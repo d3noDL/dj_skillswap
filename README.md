@@ -42,33 +42,34 @@ This project focuses on Django fundamentals:
 ## 📋 Setup Instructions (Local Development)
 
 1. Clone the repository:
-   ```bash
+   ```
    git clone https://github.com/d3noDL/dj_skillswap.git
    cd dj_skillswap
 
 2. Create a new conda environment:
-   ```bash
-  conda create --name skillswap python=3.12
-  conda activate skillswap
+   ```
+   conda create --name skillswap python=3.12
+   conda activate skillswap
 
 3. Install dependencies:
-   ```bash
-  pip install -r requirements.txt
+   ```
+   pip install -r requirements.txt
 
 4. Apply database migrations:
-   ```bash
-  python manage.py migrate
+   ```
+   python manage.py migrate
 
 5. Create a superuser (admin account):
-   ```bash
-  python manage.py createsuperuser
+   ```
+   python manage.py createsuperuser
 
 6. Run the development server:
-   ```bash
-  python manage.py runserver
+   ```
+   python manage.py runserver
 
 7. Access the local site at:
-  http://127.0.0.1:8000/
+
+http://127.0.0.1:8000/
   
 ---
 
