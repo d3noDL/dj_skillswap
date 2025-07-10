@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>add a new skill</title>
+  </head>
+  <body>
+    <h3>add a new skill:</h3>
+    <form method="post">
+      {% csrf_token %} {{ add_skill_form }}
+      <input type="submit" value="add" />
+    </form>
+    <hr />
+    <h3>all current skills:</h3>
+    <ul>
+      {% for skill in skills %}
+      <li>
+        <strong>{{ skill.name }}</strong>
+        |
+        <em>category: {{ skill.category }}</em>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
