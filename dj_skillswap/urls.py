@@ -21,4 +21,5 @@ from dj_skillswap_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('skills/', views.search_skill, name='search_skill')
+    path('add_skill', views.add_skill, name="add_skill"),
 ]

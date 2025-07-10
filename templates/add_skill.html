@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>add a new skill</title>
+  </head>
+  <body>
+    <h3>add a new skill:</h3>
+    <form method="post">
+      {% csrf_token %} {{ add_skill_form }}
+      <input type="submit" value="add" />
+    </form>
+
+    <!--Remove/move this whole block to the user profile when authentication is added-->
+    <hr />
+    <em style="color: red"
+      >▼ remove/move to user profile when authentication is added ▼</em
+    >
+    <hr />
+    <h3>user's skills:</h3>
+    <ul>
+      {% for skill in skills %}
+      <li>
+        <strong>{{ skill.name }}</strong>
+        |
+        <em>category: {{ skill.category }}</em>
+      </li>
+      {% endfor %}
+    </ul>
+    <hr />
+    <em style="color: red"
+      >▲ remove/move to user profile when authentication is added ▲</em
+    >
+    <hr />
+    <!--Remove/move this whole block to the user profile when authentication is added-->
+  </body>
+</html>
