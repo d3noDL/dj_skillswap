@@ -21,4 +21,6 @@ from dj_skillswap_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('add_skill', views.add_skill, name="add_skill"),
+    path('inbox', views.inbox, name="inbox"),
+    path('send_message', views.send_message, name="send_message")
 ]
