@@ -1,3 +1,4 @@
 from django.contrib import admin
+from dj_skillswap_app.models import Skill
 
-# Register your models here.
+admin.site.register(Skill)
