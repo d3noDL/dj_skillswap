@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from dj_skillswap_app.forms import AddSkillForm
 from dj_skillswap_app.models import Skill
+from django.contrib.auth.decorators import login_required
 
+#uncomment when we add authentication
+#@login_required
 def add_skill(request):
     skills = Skill.objects.all()
     if request.method == "POST":
