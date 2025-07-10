@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Post Skill Swap</title>
+  </head>
+  <body>
+    <h3>Post a Skill Swap</h3>
+    <form method="post">
+      {% csrf_token %} {{ add_skill_form }}
+      <input type="submit" value="add" />
+    </form>
+  </body>
+</html>

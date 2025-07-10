@@ -1,7 +1,8 @@
 from django import forms
-from dj_skillswap_app.models import Skill
+from dj_skillswap_app.models import ProfileSkill
 
-class AddSkillForm(forms.ModelForm):
+
+class AddProfileSkillForm(forms.ModelForm):
     class Meta:
-        model = Skill
-        fields = ("__all__")
+        model = ProfileSkill
+        fields = ('profile', 'skill', 'avaliability', 'description', 'type', 'pitch')
