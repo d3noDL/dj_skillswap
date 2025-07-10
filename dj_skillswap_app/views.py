@@ -11,7 +11,7 @@ def register(request):
             login(request, user)  # Log the user in immediately
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
-            return redirect('home')  # Redirect to the home page or another page
+            return redirect('/')  # Redirect to the home page or another page
     else:
         form = UserRegisterForm()
     return render(request, 'dj_skillswap_app/register.html', {'form': form})
