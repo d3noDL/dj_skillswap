@@ -19,7 +19,7 @@ def edit_profile(request):
 
     return render(request, 'profile_edit.html', {'form': form})
 
-
+@login_required
 def view_profile(request):
     profile = request.user.userprofile
     return render(request, 'profile_view.html', {'profile': profile})
