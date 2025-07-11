@@ -1,0 +1,11 @@
+{% extends 'base.html' %} {% block content %}
+<h1>Welcome to SkillSwap</h1>
+{% if user.is_authenticated %}
+<p>Hello, {{ user.username }}!</p>
+<p>
+  <a href="{% url 'view_profile' %}">View Profile</a> |
+  <a href="{% url 'edit_profile' %}">Edit Profile</a>
+</p>
+{% else %}
+<p><a href="/admin/login/">Login</a> to manage your profile.</p>
+{% endif %} {% endblock %}
