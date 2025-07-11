@@ -17,14 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from dj_skillswap_app import views
-
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),  
+    path('', include('core.urls')),
+    path('', views.home, name='home'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
-    path('profile/', views.view_profile, name='view_profile'),  
+    path('profile/', views.view_profile, name='view_profile'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('app/', include('dj_skillswap_app.urls', namespace='dj_skillswap_app')),
-
 ]
+
