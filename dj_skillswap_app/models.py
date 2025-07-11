@@ -7,9 +7,9 @@ class Skill(models.Model):
     category = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"Skill: {self.name} in the category :{category}"
-    
-    
+        return f"Skill: {self.name} in the category :{self.category}"
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
@@ -17,4 +17,4 @@ class UserProfile(models.Model):
     skills_needed = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.firstname} {self.lastname} | {self.user.username}"
+        return f"{self.firstname} {self.lastname}"

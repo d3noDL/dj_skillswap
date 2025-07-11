@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'dj_skillswap_app'
+    'dj_skillswap_app',
     'core'
 ]
 
@@ -61,7 +61,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [TEMPLATES_DIR, STATIC_DIR, MEDIA_DIR],
-        'DIRS': [BASE_DIR / 'dj_skillswap_app' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,8 +122,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [STATIC_DIR]
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'core/static']
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -133,6 +131,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = MEDIA_DIR
-
 
 LOGIN_REDIRECT_URL = 'dj_skillswap_app:home'
