@@ -28,7 +28,7 @@
               >
             </li>
             <li class="nav-item">
-              <form action="{% url 'logout' %}" method="post" class="d-inline">
+              <form action="{% url 'dj_skillswap_app:logout' %}" method="post" class="d-inline">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-outline-danger btn-sm">
                   Logout
@@ -39,7 +39,14 @@
             <li class="nav-item">
               <a
                 class="nav-link btn btn-outline-primary btn-sm"
-                href="{% url 'login' %}"
+                href="{% url 'dj_skillswap_app:signup' %}"
+                >Signup</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-outline-primary btn-sm"
+                href="{% url 'dj_skillswap_app:login' %}"
                 >Login</a
               >
             </li>

@@ -25,10 +25,6 @@ def view_profile(request):
     return render(request, 'profile_view.html', {'profile': profile})
 
 
-def home(request):
-    return render(request, 'home.html')
-
-
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -44,4 +40,4 @@ def register(request):
 
 
 def home(request):
-    return render(request, 'dj_skillswap_app/home.html')
+    return render(request, 'core/home.html')
