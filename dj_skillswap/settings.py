@@ -61,6 +61,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [TEMPLATES_DIR, STATIC_DIR, MEDIA_DIR],
+        'DIRS': [BASE_DIR / 'dj_skillswap_app' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,7 +131,8 @@ STATICFILES_DIRS = [BASE_DIR / 'core/static']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Media directory
-
 MEDIA_URL = 'media/'
 MEDIA_ROOT = MEDIA_DIR
+
+
+LOGIN_REDIRECT_URL = 'dj_skillswap_app:home'
