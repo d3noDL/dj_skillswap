@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('skills/', views.search_skill, name='search_skill'),
     path('add_skill/', views.add_skill, name="add_skill"),
-    path('browse_posts/', views.list_posts, name="posts")
+    path('browse_posts/', views.list_posts, name="posts"),
+    path('post_details/<int:id>/', views.post_detail, name='post_details')
 ]

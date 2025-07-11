@@ -23,15 +23,21 @@
     </thead>
     <tbody>
         {% for row in rows %}
-            <tr>
-                {% for value in row %}
+            <tr data-href="{% url 'post_details' row.id %}">
+                {% for value in row.values %}
                     <td>{{ value }}</td>
                 {% endfor %}
             </tr>
         {% endfor %}
     </tbody>
 </table>
-
-
+  </table>
+  <script>
+    document.querySelectorAll('tr[data-href]').forEach(row => {
+        row.addEventListener('click', () => {
+            window.location.href = row.dataset.href;
+        });
+    });
+  </script>
 </body>
 </html>
