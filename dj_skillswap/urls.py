@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path,include
 from dj_skillswap_app import views
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +28,10 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('profile/', views.view_profile, name='view_profile'),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/register/', views.register, name='register'),
     path('app/', include('dj_skillswap_app.urls', namespace='dj_skillswap_app')),
+    
 ]
 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,37 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body text-center">
+          <h3 class="card-title">{{ request.user.username }}'s Profile</h3>
+
+          {% if profile.profile_picture %}
+          <img
+            src="{{ profile.profile_picture.url }}"
+            alt="Profile Picture"
+            class="img-thumbnail mb-3"
+            width="150"
+          />
+          {% else %}
+          <img
+            src="{% static 'img/default.jpg' %}"
+            alt="Default Profile"
+            class="img-thumbnail mb-3"
+            width="150"
+          />
+          {% endif %}
+
+          <p><strong>Bio:</strong> {{ profile.bio }}</p>
+          <p><strong>Skills Offered:</strong> {{ profile.skills_offered }}</p>
+          <p><strong>Skills Needed:</strong> {{ profile.skills_needed }}</p>
+
+          <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3"
+            >Edit Profile</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

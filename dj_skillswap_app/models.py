@@ -15,6 +15,8 @@ class UserProfile(models.Model):
     bio = models.TextField(blank=True)
     skills_offered = models.TextField(blank=True)
     skills_needed = models.TextField(blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 
+    
     def __str__(self):
-        return f"{self.firstname} {self.lastname} | {self.user.username}"
+        return self.user.username

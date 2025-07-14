@@ -1,31 +1,30 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import UserProfileForm
+from django.contrib import messages
+from django.contrib.auth import login
+from .forms import UserRegisterForm
 
 @login_required
 def edit_profile(request):
     profile = request.user.userprofile  
 
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=profile)
+        form = UserProfileForm(request.POST,request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             return redirect('view_profile')  
     else:
         form = UserProfileForm(instance=profile)
 
-    return render(request, 'profile_edit.html', {'form': form})
-
+    return render(request, 'profile/profile_edit.html', {'form': form})
+@login_required
 def view_profile(request):
     profile = request.user.userprofile
-    return render(request, 'profile_view.html', {'profile': profile})
+    return render(request, 'profile/profile_view.html', {'profile': profile})
 
 def home(request):
     return render(request, 'home.html')
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth import login
-from .forms import UserRegisterForm
 
 def register(request):
     if request.method == 'POST':
@@ -40,5 +39,4 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'dj_skillswap_app/register.html', {'form': form})
 
-def home(request):
-    return render(request, 'dj_skillswap_app/home.html')
+
