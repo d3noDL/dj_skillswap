@@ -26,10 +26,12 @@
         <p>
 				
 					<strong>{{post_what}}</strong>
-					
+	
 					{{ post_data.description }}</p>
         <h5>Avaliability <em>{{ post_data.avaliability }}</em></h5>
-			</div>
+				<a href="{% url 'edit_post' post_data.id %}">Edit this post</a>
 
+			</div>
+	
 	</div>
 </div>                                        
