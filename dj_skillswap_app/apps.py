@@ -8,3 +8,4 @@ class DjSkillswapAppConfig(AppConfig):
 
 def ready(self):
         import dj_skillswap_app.signals
+

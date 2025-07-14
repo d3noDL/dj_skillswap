@@ -13,19 +13,20 @@ def edit_profile(request):
     profile,created = UserProfile.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=profile)
+        form = UserProfileForm(request.POST,request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             return redirect('dj_skillswap_app:view_profile')
     else:
         form = UserProfileForm(instance=profile)
 
-    return render(request, 'dj_skillswap_app/profile_edit.html', {'form': form})
+    return render(request, 'profile/profile_edit.html', {'form': form})
 
 @login_required
 def view_profile(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
-    return render(request, 'profile_view.html', {'profile': profile})
+    return render(request, 'profile/profile_view.html', {'profile': profile})
+
 
 
 def register(request):
@@ -43,8 +44,10 @@ def register(request):
     return render(request, 'dj_skillswap_app/register.html', {'form': form})
 
 
+
 def home(request):
     return render(request, 'core/home.html')
+
 
 class CustomLoginView(LoginView):
     template_name = 'dj_skillswap_app/login.html'
@@ -58,3 +61,4 @@ class CustomLoginView(LoginView):
         if not hasattr(profile, 'is_complete') or not profile.is_complete():
             return reverse('dj_skillswap_app:edit_profile')
         return reverse('dj_skillswap_app:view_profile')
+

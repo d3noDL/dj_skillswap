@@ -120,8 +120,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [STATIC_DIR]
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
 
 
 # Default primary key field type
@@ -130,8 +131,10 @@ STATICFILES_DIRS = [STATIC_DIR]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = 'media/'
-MEDIA_ROOT = MEDIA_DIR
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 LOGIN_REDIRECT_URL = '/profile/'
 LOGIN_URL = '/dj_skillswap_app/login/'
 LOGOUT_REDIRECT_URL = 'home'
+
