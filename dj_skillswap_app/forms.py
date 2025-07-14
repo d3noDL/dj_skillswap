@@ -1,14 +1,13 @@
 from django import forms
-from .models import UserProfile
+from .models import Category, Skill, UserProfile, UserProfileSkill
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from dj_skillswap_app.models import UserProfileSkill
 
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['bio', 'profile_picture']
+        fields = ['firstname', 'lastname', 'bio', 'profile_picture']
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Tell us about yourself'}),
         }
@@ -28,11 +27,34 @@ class UserRegisterForm(UserCreationForm):
 
 
 class AddProfileSkillForm(forms.ModelForm):
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        required=False,
+        label="Category",
+    )
+
+    class Meta:
+        model = UserProfileSkill
+        fields = ('category', 'skill',  'avaliability',
+                  'description', 'type', 'pitch', 'status')
+
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)  # get user from view
         super().__init__(*args, **kwargs)
 
-    class Meta:
-        model = UserProfileSkill
-        fields = ('profile', 'skill', 'avaliability',
-                  'description', 'type', 'pitch', 'status')
+        # 1. if editing an existing skill
+        if self.instance and self.instance.pk:
+            skill = self.instance.skill
+            self.fields['category'].initial = skill.category
+            self.fields['skill'].queryset = Skill.objects.filter(
+                category=skill.category)
+        # 2. if creating a new skill
+        elif 'category' in self.data:
+            try:
+                category_id = int(self.data.get('category'))
+                self.fields['skill'].queryset = Skill.objects.filter(
+                    category_id=category_id)
+            except (ValueError, TypeError):
+                self.fields['skill'].queryset = Skill.objects.none()
+        else:
+            self.fields['skill'].queryset = Skill.objects.none()

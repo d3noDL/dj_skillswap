@@ -21,7 +21,8 @@
             width="150"
           />
           {% endif %}
-
+          <p><strong>First name:</strong> {{ profile.firstname }}</p>
+          <p><strong>Last name:</strong> {{ profile.lastname }}</p>
           <p><strong>Bio:</strong> {{ profile.bio }}</p>
 
           <a href="{% url 'dj_skillswap_app:edit_profile' %}" class="btn btn-primary mt-3"

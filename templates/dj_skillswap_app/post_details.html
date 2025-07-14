@@ -1,11 +1,15 @@
-<div class="v-card">
-	<!-- tab Content -->
-	<div class="tab-content">
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="card mt-3">
+	<div>
 		<!-- Tab Pane - Home -->
-		<div class="tab-pane fade active in" id="home">
+		<div class="card-body" id="home">
 			<!-- Home Image -->
 			<div class="vcard-img">
-				<a href="#"><img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" class="img-responsive img-thumbnail"></a>
+				{% if post_data.profile.profile_picture %}
+					<img src="{{ post_data.profile.profile_picture.url }}" alt="" class="rounded-circle" width="150">
+				{% else %}
+					<img src="{% static 'images/avatar-placeholder.jpg' %}" alt="" class="rounded-circle" width="150">
+				{% endif %}
 			</div>
 			<div >
 				<!-- Name -->
@@ -30,9 +34,10 @@
 					{{ post_data.description }}</p>
         <h5>Avaliability <em>{{ post_data.avaliability }}</em></h5>
 				<h5>Status <em>{{ post_data.status|yesno:"Active,Inactive" }}</em></h5>
-				<a href="{% url 'post_update' post_data.id %}">Edit this post</a>
+				<a href="{% url 'dj_skillswap_app:post_update' post_data.id %}">Edit this post</a>
 
 			</div>
 	
 	</div>
 </div>                                        
+{% endblock %}

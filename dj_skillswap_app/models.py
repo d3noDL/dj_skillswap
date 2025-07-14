@@ -2,12 +2,19 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Skill(models.Model):
-    name = models.CharField(max_length=255)
-    category = models.CharField(max_length=255)
+class Category(models.Model):
+    name = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"Skill: {self.name} in the category :{self.category}"
+        return self.name
+
+
+class Skill(models.Model):
+    name = models.CharField(max_length=255)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 class UserProfileSkill(models.Model):
@@ -23,10 +30,9 @@ class UserProfileSkill(models.Model):
     avaliability = models.CharField(max_length=250)
     pitch = models.CharField(max_length=140)
     created_at = models.DateTimeField(
-        auto_now_add=True)  
+        auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    status = models.BooleanField(default=True)  
-        
+    status = models.BooleanField(default=True)
 
 
 class UserProfile(models.Model):
@@ -39,11 +45,10 @@ class UserProfile(models.Model):
     skills = models.ManyToManyField('Skill', through='UserProfileSkill')
     profile_picture = models.ImageField(
         upload_to='profile_pics/', blank=True, null=True)
-    
 
-    def __str__(self):       
+    def __str__(self):
         full_name = f"{self.user.first_name} {self.user.last_name}".strip()
-        return full_name 
+        return full_name
 
     def is_complete(self):
-        return bool(self.bio.strip())
+        return bool(self.firstname .strip() and self.lastname.strip() and self.bio.strip())

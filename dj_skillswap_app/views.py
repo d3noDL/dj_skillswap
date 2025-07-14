@@ -1,7 +1,7 @@
 from django.http import HttpResponseForbidden
 from django.db.models import Q
 from dj_skillswap_app.forms import AddProfileSkillForm
-from dj_skillswap_app.models import Skill, UserProfileSkill, UserProfile
+from dj_skillswap_app.models import Category, Skill, UserProfileSkill, UserProfile
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.urls import reverse
-from .models import UserProfile
+from django.http import JsonResponse
 
 
 @login_required
@@ -66,6 +66,12 @@ class CustomLoginView(LoginView):
         return reverse('dj_skillswap_app:view_profile')
 
 
+def get_skills(request):
+    category_id = request.GET.get('category_id')
+    skills = Skill.objects.filter(category_id=category_id).values('id', 'name')
+    return JsonResponse(list(skills), safe=False)
+
+
 def skill_search(request):
     if 'param' in request.GET:
         param = request.GET['param']
@@ -86,41 +92,47 @@ def post_create(request):
     if not profile.bio or not profile.firstname and profile.lastname:  # verify if fields needed are filled
         messages.info(
             request, "Complete seu perfil antes de adicionar habilidades.")
-        return redirect('edit_profile')  # redirect to profile edit page
+        # redirect to profile edit page
+        return redirect('dj_skillswap_app:edit_profile')
     if request.method == "POST":
-        skill_form = AddProfileSkillForm(data=request.POST)
+        skill_form = AddProfileSkillForm(data=request.POST, user=request.user)
 
         if skill_form.is_valid():
-            skill = skill_form.save()
             skill = skill_form.save(commit=False)
             skill.profile = profile
             skill.save()
-            return redirect('post_list')  # redirect to the list of posts
+            # redirect to the list of posts
+            return redirect('dj_skillswap_app:post_list')
         else:
             messages.error(
                 request, "Error on saving skill. Please verify the form.")
-            return redirect('post_create')
+            return redirect('dj_skillswap_app:post_create')
     else:
-        skill_form = AddProfileSkillForm()
+        skill_form = AddProfileSkillForm(user=request.user)
 
-    return render(request, "dj_skillswap_app/create_update_post.html", {"post_form": AddProfileSkillForm, "skills": skills})
+    return render(request, "dj_skillswap_app/create_update_post.html", {"post_form": skill_form, "skills": skills})
 
 
 def post_list(request):
     EXCLUDED_FIELDS = ['id', 'created_at', 'updated_at', 'description']
-    if 'param' in request.GET:
-        param = request.GET['param']
-        query = Q(Q(skill__name__icontains=param) |
-                  Q(skill__category__icontains=param) |
-                  Q(type__icontains=param))
-        posts = UserProfileSkill.objects.filter(query)
-    else:
-        posts = UserProfileSkill.objects.all()
+    param = request.GET.get('param', '')
+    category_id = request.GET.get('category', '')
 
+    query = Q()
+    if param:
+        query &= Q(skill__name__icontains=param) | Q(
+            skill__category__name__icontains=param) | Q(type__icontains=param)
+    if category_id:
+        query &= Q(skill__category_id=category_id)
+
+    posts = UserProfileSkill.objects.filter(query)
+
+    categories = Category.objects.all()
     fields = [
         field for field in UserProfileSkill._meta.fields
         if field.name not in EXCLUDED_FIELDS
     ]
+
     rows = []
     for post in posts:
         row = {
@@ -135,8 +147,14 @@ def post_list(request):
                 value = "Active" if value else "Inactive"
             row['values'].append(value)
         rows.append(row)
-    return render(request, 'dj_skillswap_app/posts_list.html', context={'rows': rows,
-                                                                        'fields': fields, })
+
+    return render(request, 'dj_skillswap_app/posts_list.html', context={
+        'rows': rows,
+        'fields': fields,
+        'categories': categories,
+        'search_term': param,
+        'selected_category': int(category_id) if category_id else None
+    })
 
 
 @login_required
@@ -151,7 +169,7 @@ def post_update(request, id):
         if form.is_valid():
             form.save()
             messages.success(request, "Post updated successfully.")
-            return redirect('post_list')
+            return redirect('dj_skillswap_app:post_list')
         else:
             messages.error(
                 request, "Error updating post. Please verify the form.")
@@ -162,23 +180,16 @@ def post_update(request, id):
 
 def post_detail(request, id):
     post = get_object_or_404(UserProfileSkill, pk=id)
-    fields = [field for field in UserProfileSkill._meta.fields if field.name not in [
-        'created_at', 'updated_at']]
 
-    post_data = {}
-    for field in fields:
-        value = getattr(post, field.name)
-        if isinstance(value, bool):
-            value = "Active" if value else "Inactive"
-        else:
-            value = str(value)
-        post_data[field.verbose_name.title()] = value
-        if post.type == 'Offer':
-            post_type = "I'm offering "
-            post_what = "What am I offering?"
-        else:
-            post_type = "I'm requesting "
-            post_what = "What am I resquesting?"
-    post_data['id'] = post.id
+    if post.type == 'Offer':
+        post_type = "I'm offering "
+        post_what = "What am I offering?"
+    else:
+        post_type = "I'm requesting "
+        post_what = "What am I requesting?"
 
-    return render(request, 'dj_skillswap_app/post_details.html', context={'post_data': post_data, "post_type": post_type, "post_what": post_what})
+    return render(request, 'dj_skillswap_app/post_details.html', context={
+        'post_data': post,
+        'post_type': post_type,
+        'post_what': post_what,
+    })
