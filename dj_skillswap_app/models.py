@@ -19,8 +19,14 @@ class UserProfile(models.Model):
 
     
     def __str__(self):
-<<<<<<< HEAD
         return self.user.username
-=======
-        return f"{self.firstname} {self.lastname}"
->>>>>>> b1b29b516536ce54bd2be856ac7cd4dba61402dd
+
+        full_name = f"{self.user.first_name} {self.user.last_name}".strip()
+        return full_name or self.user.username
+    
+    def is_complete(self):
+        return bool(self.bio.strip() and self.skills_offered.strip() and self.skills_needed.strip())
+
+
+        
+

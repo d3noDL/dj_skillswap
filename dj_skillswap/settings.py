@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dj_skillswap_app',
     'core',
-
 ]
 
 MIDDLEWARE = [
@@ -61,8 +60,7 @@ ROOT_URLCONF = 'dj_skillswap.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR, STATIC_DIR, MEDIA_DIR],
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR/'templates', TEMPLATES_DIR, STATIC_DIR, MEDIA_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -136,6 +134,7 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = '/profile/'
+LOGIN_URL = '/dj_skillswap_app/login/'
 LOGOUT_REDIRECT_URL = 'home'
 
