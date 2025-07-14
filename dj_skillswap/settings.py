@@ -60,7 +60,7 @@ ROOT_URLCONF = 'dj_skillswap.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR/'templates', TEMPLATES_DIR, STATIC_DIR, MEDIA_DIR],
+        'DIRS': [BASE_DIR, TEMPLATES_DIR, STATIC_DIR, MEDIA_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,7 +124,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -134,7 +133,6 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-LOGIN_REDIRECT_URL = '/profile/'
-LOGIN_URL = '/dj_skillswap_app/login/'
+LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = '/app/login/'
 LOGOUT_REDIRECT_URL = 'home'
-

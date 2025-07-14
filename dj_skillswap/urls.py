@@ -22,16 +22,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('core.urls')),    
-    path('', views.home, name='home'),
-    path('profile/edit/', views.edit_profile, name='edit_profile'),
-    path('profile/', views.view_profile, name='view_profile'),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/register/', views.register, name='register'),
+    path('', include('core.urls')),
     path('app/', include('dj_skillswap_app.urls', namespace='dj_skillswap_app')),
-    
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

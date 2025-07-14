@@ -23,10 +23,8 @@
           {% endif %}
 
           <p><strong>Bio:</strong> {{ profile.bio }}</p>
-          <p><strong>Skills Offered:</strong> {{ profile.skills_offered }}</p>
-          <p><strong>Skills Needed:</strong> {{ profile.skills_needed }}</p>
 
-          <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3"
+          <a href="{% url 'dj_skillswap_app:edit_profile' %}" class="btn btn-primary mt-3"
             >Edit Profile</a
           >
         </div>
