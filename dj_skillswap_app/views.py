@@ -76,6 +76,8 @@ def list_posts(request):
             value = getattr(post, field.name)
             if field.is_relation and hasattr(value, 'pk'):
                 value = str(value)
+            elif isinstance(value, bool):
+                value = "Active" if value else "Inactive"
             row['values'].append(value)
         rows.append(row)
     return render(request, 'dj_skillswap_app/browse_posts.html', context={'rows': rows,
@@ -110,7 +112,10 @@ def post_detail(request, id):
     post_data = {}
     for field in fields:
         value = getattr(post, field.name)
-        value = str(value)
+        if isinstance(value, bool):
+            value = "Active" if value else "Inactive"
+        else:
+            value = str(value)
         post_data[field.verbose_name.title()] = value
         if post.type == 'Offer':
             post_type = "I'm offering "
@@ -118,4 +123,6 @@ def post_detail(request, id):
         else:
             post_type = "I'm requesting "
             post_what = "What am I resquesting?"
-    return render(request, 'dj_skillswap_app/post_details.html', context={'post_data': post, "post_type": post_type, "post_what": post_what})
+    post_data['id'] = post.id
+
+    return render(request, 'dj_skillswap_app/post_details.html', context={'post_data': post_data, "post_type": post_type, "post_what": post_what})

@@ -10,4 +10,4 @@ class AddProfileSkillForm(forms.ModelForm):
     class Meta:
         model = UserProfileSkill
         fields = ('profile', 'skill', 'avaliability',
-                  'description', 'type', 'pitch')
+                  'description', 'type', 'pitch', 'status')

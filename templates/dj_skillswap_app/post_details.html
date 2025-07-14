@@ -29,6 +29,7 @@
 	
 					{{ post_data.description }}</p>
         <h5>Avaliability <em>{{ post_data.avaliability }}</em></h5>
+				<h5>Status <em>{{ post_data.status|yesno:"Active,Inactive" }}</em></h5>
 				<a href="{% url 'edit_post' post_data.id %}">Edit this post</a>
 
 			</div>

@@ -22,6 +22,10 @@ class UserProfileSkill(models.Model):
         max_length=20, choices=TypePosting.choices, default=TypePosting.OFFER)
     avaliability = models.CharField(max_length=250)
     pitch = models.CharField(max_length=140)
+    created_at = models.DateTimeField(
+        auto_now_add=True)  
+    updated_at = models.DateTimeField(auto_now=True)
+    status = models.BooleanField(default=True)  
 
 
 class UserProfile(models.Model):
