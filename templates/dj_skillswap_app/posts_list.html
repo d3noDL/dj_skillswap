@@ -1,0 +1,46 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<h1>Skill Swap List</h1>
+<form method="get" action="{% url 'dj_skillswap_app:post_list' %}">
+  <input type="text" name="param" value="{{ search_term }}" class="form-control">
+
+  <select name="category" class="form-select">
+    <option value="">All Categories</option>
+    {% for cat in categories %}
+    <option value="{{ cat.id }}" {% if cat.id == selected_category %}selected{% endif %}>{{ cat.name }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit">Search</button>
+  {% csrf_token %}
+</form>
+<a href="{% url 'dj_skillswap_app:post_create' %}">Create a post</a>
+<table>
+  <table>
+    <thead>
+      <tr>
+        {% for field in fields %}
+        <th>{{ field.verbose_name|title }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr data-href="{% url 'dj_skillswap_app:post_details' row.id %}">
+        {% for value in row.values %}
+        <td>{{ value }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</table>
+
+{% endblock %}
+{% block script %}
+<script>
+  document.querySelectorAll('tr[data-href]').forEach(row => {
+    row.addEventListener('click', () => {
+      window.location.href = row.dataset.href;
+    });
+  });
+</script>
+{% endblock %}

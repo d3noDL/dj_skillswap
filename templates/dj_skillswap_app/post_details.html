@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="card mt-3">
+	<div>
+		<!-- Tab Pane - Home -->
+		<div class="card-body" id="home">
+			<!-- Home Image -->
+			<div class="vcard-img">
+				{% if post_data.profile.profile_picture %}
+					<img src="{{ post_data.profile.profile_picture.url }}" alt="" class="rounded-circle" width="150">
+				{% else %}
+					<img src="{% static 'images/avatar-placeholder.jpg' %}" alt="" class="rounded-circle" width="150">
+				{% endif %}
+			</div>
+			<div >
+				<!-- Name -->
+				<h4>{{ post_data.profile }}</h4>
+        <!-- Bio -->
+				<p>{{ post_data.profile.bio }}</p>
+				<hr>
+				<!-- Skills Offering/requesting -->
+				<h4>{{ post_type }}</h4>
+				<small>Skill</small>
+				<span class="label label-red">{{ post_data.skill }}</span>
+				<small>Category</small>
+				<span class="label label-red">{{ post_data.skill.category }}</span>
+				<br>
+				
+        <p><strong>Why me?</strong> {{ post_data.pitch }}</p>
+
+        <p>
+				
+					<strong>{{post_what}}</strong>
+	
+					{{ post_data.description }}</p>
+        <h5>Avaliability <em>{{ post_data.avaliability }}</em></h5>
+				<h5>Status <em>{{ post_data.status|yesno:"Active,Inactive" }}</em></h5>
+				<a href="{% url 'dj_skillswap_app:post_update' post_data.id %}">Edit this post</a>
+
+			</div>
+	
+	</div>
+</div>                                        
+{% endblock %}

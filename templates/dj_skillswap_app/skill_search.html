@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Browse Skills</h1>
+  <form method="get" action="{% url 'search_skill' %}">
+  <input type="text" name="param"  placeholder="Enter a parameter">
+  <button type="submit">Search</button>
+  {% csrf_token %}
+</form>
+  <table>
+    <thead>
+      <tr>
+        <td>Skill</td>
+        <td>Category</td>
+      </tr>
+    </thead>
+    <tbody>
+    {% for skill in skill_data %}
+    <tr>
+      <td>{{ skill.name }}</td>
+      <td>{{ skill.category }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>  
+
+</body>
+</html>
