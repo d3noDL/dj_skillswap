@@ -7,7 +7,7 @@ class Skill(models.Model):
     category = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"Skill: {self.name} in the category :{self.category}"
 
 
 class UserProfileSkill(models.Model):
@@ -26,6 +26,7 @@ class UserProfileSkill(models.Model):
         auto_now_add=True)  
     updated_at = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=True)  
+        
 
 
 class UserProfile(models.Model):
@@ -36,6 +37,13 @@ class UserProfile(models.Model):
         upload_to='userprofile_pics/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     skills = models.ManyToManyField('Skill', through='UserProfileSkill')
+    profile_picture = models.ImageField(
+        upload_to='profile_pics/', blank=True, null=True)
+    
 
-    def __str__(self):
-        return f"{self.firstname} {self.lastname}"
+    def __str__(self):       
+        full_name = f"{self.user.first_name} {self.user.last_name}".strip()
+        return full_name 
+
+    def is_complete(self):
+        return bool(self.bio.strip())

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="text-center my-5">
+    <h1 class="display-5">Learn and teach skills in<br>your community</h1>
+    <div class="mt-5">
+        <a href="{% url 'dj_skillswap_app:login' %}" class="btn custom-offer-btn me-3 px-4 py-2 fw-semibold" style="background-color: #00BA86; color: white;">Offer a skill</a>
+        <a href="{% url 'dj_skillswap_app:login' %}" class="btn btn-outline-dark px-4 py-2 fw-semibold">Find a skill</a>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row justify-content-center g-2">
+        <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="🔍 Search skills">
+        </div>
+        <div class="col-md-2">
+            <select class="form-select">
+                <option selected>Category</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-select">
+                <option selected>Location</option>
+            </select>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<h2 class="text-center mb-4">Popular Skills</h2>
+<div class="d-flex justify-content-center flex-wrap gap-4 mb-5">
+
+     <div style="width: 220px; border: 1px solid black;">
+        <div
+                        style="height: 80px; background-color: #ECE8C4; display: flex; justify-content: center; align-items: center;">
+            <span class="mt-4" style="font-size: 3rem;">🧑🏼‍🍳</span>
+        </div>
+        <div class="text-center py-2" style="background-color: white;">
+                        <h5 class="mt-3" style="font-size: 1.5rem;">Cooking</h5>
+            <span class="mb-" style="color: gold; font-size: 1.70rem;">★★★★★</span>
+            <p class="mt-1" style="font-size: 1.0rem;">Brian Jones</p>
+            <p class="mb-4 mt-2 text-muted" style="font-size: 0.85rem;">Learn to cook delicious meals</p>
+        </div>
+    </div>
+
+     <div style="width: 220px; border: 1px solid black;">
+        <div
+            style="height: 80px; background-color: #D7D6EB; display: flex; justify-content: center; align-items: center;">
+            <span class="mt-4" style="font-size: 3rem;">👩🏽‍💻</span>
+        </div>
+        <div class="text-center py-2" style="background-color: white;">
+                        <h5 class="mt-3" style="font-size: 1.5rem;">Programming</h5>
+            <span class="mb-" style="color: gold; font-size: 1.70rem;">★★★★★</span>
+            <p class="mt-1" style="font-size: 1.0rem;">Kate Hudson</p>
+            <p class="mb-4 mt-2 text-muted" style="font-size: 0.85rem;">Web development lessons</p>
+        </div>
+    </div>
+
+     <div style="width: 220px; border: 1px solid black;">
+        <div
+            style="height: 80px; background-color: #C4E3C8; display: flex; justify-content: center; align-items: center;">
+            <span class="mt-4" style="font-size: 3rem;">👨🏻‍🎨</span>
+        </div>
+        <div class="text-center py-2" style="background-color: white;">
+                       <h5 class="mt-3" style="font-size: 1.5rem;">Art</h5>
+            <span class="mb-" style="color: gold; font-size: 1.70rem;">★★★★★</span>
+            <p class="mt-1" style="font-size: 1.0rem;">John Doe</p>
+            <p class="mb-4 mt-2 text-muted" style="font-size: 0.85rem;">Painting and drawing lessons</p>
+        </div>
+    </div>
+    <div style="width: 220px; border: 1px solid black;">
+        <div
+            style="height: 80px; background-color: #E0D0D1; display: flex; justify-content: center; align-items: center;">
+            <span class="mt-4" style="font-size: 3rem;">👩🏼‍🔬</span>
+        </div>
+        <div class="text-center py-2" style="background-color: white;">
+            <h5 class="mt-3" style="font-size: 1.5rem;">Science</h5>
+            <span class="mb-" style="color: gold; font-size: 1.70rem;">★★★★★</span>
+            <p class="mt-1" style="font-size: 1.0rem;">Sarah Smith</p>
+            <p class="mb-4 mt-2 text-muted" style="font-size: 0.85rem;">Explore the wonders of science</p>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
