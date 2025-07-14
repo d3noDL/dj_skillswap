@@ -17,4 +17,11 @@ class UserProfile(models.Model):
     skills_needed = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.firstname} {self.lastname}"
+        full_name = f"{self.user.first_name} {self.user.last_name}".strip()
+        return full_name or self.user.username
+    
+    def is_complete(self):
+        return bool(self.bio.strip() and self.skills_offered.strip() and self.skills_needed.strip())
+
+
+        
