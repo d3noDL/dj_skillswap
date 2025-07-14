@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dj_skillswap_app',
-    'core'
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -60,7 +60,7 @@ ROOT_URLCONF = 'dj_skillswap.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR, STATIC_DIR, MEDIA_DIR],
+        'DIRS': [BASE_DIR/'templates', TEMPLATES_DIR, STATIC_DIR, MEDIA_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,5 +132,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = MEDIA_DIR
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = '/profile/'
+LOGIN_URL = '/dj_skillswap_app/login/'
 LOGOUT_REDIRECT_URL = 'home'
