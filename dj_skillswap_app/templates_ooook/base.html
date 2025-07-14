@@ -1,7 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<<<<<<< HEAD
   <head>
     <meta charset="UTF-8" />
     <title>SkillSwap</title>
@@ -34,40 +32,11 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'edit_profile' %}"
-=======
-
-<head>
-    <meta charset="UTF-8">
-    <title>SkillSwap</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-</head>
-
-<body>
-    <nav class="navbar custom-navbar justify-content-between px-4">
-        <a class="navbar-brand" href="#">
-            <img src="{% static 'images/homelogo.png' %}" alt="SkillSwap Logo" width="100" height="100">
-        </a>
-        <ul class="navbar-nav ml-auto">
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-                 <a href="#" class="me-3">Browse Skills</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'dj_skillswap_app:view_profile' %}">My Profile</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'dj_skillswap_app:edit_profile' %}"
->>>>>>> b1b29b516536ce54bd2be856ac7cd4dba61402dd
                 >Edit Profile</a
               >
             </li>
             <li class="nav-item">
-<<<<<<< HEAD
               <form action="{% url 'logout' %}" method="post" class="d-inline">
-=======
-              <form action="{% url 'dj_skillswap_app:logout' %}" method="post" class="d-inline">
->>>>>>> b1b29b516536ce54bd2be856ac7cd4dba61402dd
                 {% csrf_token %}
                 <button type="submit" class="btn btn-outline-danger btn-sm">
                   Logout
@@ -78,24 +47,12 @@
             <li class="nav-item">
               <a
                 class="nav-link btn btn-outline-primary btn-sm"
-<<<<<<< HEAD
                 href="{% url 'login' %}"
-=======
-                href="{% url 'dj_skillswap_app:signup' %}"
-                >Signup</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link btn btn-outline-primary btn-sm"
-                href="{% url 'dj_skillswap_app:login' %}"
->>>>>>> b1b29b516536ce54bd2be856ac7cd4dba61402dd
                 >Login</a
               >
             </li>
             {% endif %}
           </ul>
-<<<<<<< HEAD
         </div>
       </div>
     </nav>
@@ -103,15 +60,3 @@
     <main class="container py-4">{% block content %} {% endblock %}</main>
   </body>
 </html>
-=======
-           
-       
-    </nav>
-
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-</body>
-
-</html>
->>>>>>> b1b29b516536ce54bd2be856ac7cd4dba61402dd

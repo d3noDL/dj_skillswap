@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dj_skillswap_app',
     'core',
+
 ]
 
 MIDDLEWARE = [
@@ -122,9 +123,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [STATIC_DIR]
-STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
 
 
 # Default primary key field type
@@ -136,5 +136,6 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-LOGIN_REDIRECT_URL = 'dj_skillswap_app:home'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 
