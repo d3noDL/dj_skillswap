@@ -4,9 +4,9 @@
     <title>Post Skill Swap</title>
   </head>
   <body>
-    <h3>{% if add_skill_form.instance.id %}Edit Skill Swap{% else %}Post a Skill Swap{% endif %}</h3>
+    <h3>{% if post_form.instance.id %}Edit Skill Swap{% else %}Post a Skill Swap{% endif %}</h3>
     <form method="post">
-      {% csrf_token %} {{ add_skill_form }}
+      {% csrf_token %} {{ post_form }}
       <input type="submit" value="Save" />
     </form>
   </body>

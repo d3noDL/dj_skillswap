@@ -7,7 +7,7 @@
 </head>
 <body>
   <h1>Skill Swap List</h1>
-   <form method="get" action="{% url 'posts' %}">
+   <form method="get" action="{% url 'post_list' %}">
   <input type="text" name="param"  placeholder="Enter a skill">
   <button type="submit">Search</button>
   {% csrf_token %}

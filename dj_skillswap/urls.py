@@ -20,9 +20,9 @@ from dj_skillswap_app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('skills/', views.search_skill, name='search_skill'),
-    path('add_skill/', views.add_skill, name="add_skill"),
-    path('browse_posts/', views.list_posts, name="posts"),
+    path('skills/search/', views.skill_search, name='skill_search'),
+    path('posts/add/', views.post_create, name='post_create'),
+    path('posts/', views.post_list, name='post_list'),
     path('post_details/<int:id>/', views.post_detail, name='post_details'),
-    path('edit_post/<int:id>/', views.edit_skill, name='edit_post')
+    path('posts/<int:id>/edit/', views.post_update, name='post_update'),
 ]

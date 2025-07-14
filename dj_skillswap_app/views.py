@@ -9,7 +9,7 @@ from django.contrib import messages
 # Create your views here.
 
 
-def search_skill(request):
+def skill_search(request):
     if 'param' in request.GET:
         param = request.GET['param']
         query = Q(Q(name__icontains=param) | Q(category__icontains=param))
@@ -17,13 +17,13 @@ def search_skill(request):
     else:
         skill_data = Skill.objects.all()
     contex = {'skill_data': skill_data}
-    return render(request, 'dj_skillswap_app/browse_skill.html', contex)
+    return render(request, 'dj_skillswap_app/skill_search.html', contex)
 
 # uncomment when we add authentication
 # @login_required
 
 
-def add_skill(request):
+def post_create(request):
     skills = Skill.objects.all()
     user = request.user
     profile, created = UserProfile.objects.get_or_create(user=request.user)
@@ -40,18 +40,18 @@ def add_skill(request):
             skill = skill_form.save(commit=False)
             skill.profile = profile
             skill.save()
-            return redirect('posts')  # redirect to the list of posts
+            return redirect('post_list')  # redirect to the list of posts
         else:
             messages.error(
                 request, "Error on saving skill. Please verify the form.")
-            return redirect('add_skill')
+            return redirect('post_create')
     else:
         skill_form = AddProfileSkillForm()
 
-    return render(request, "dj_skillswap_app/add_profile_skill.html", {"add_skill_form": AddProfileSkillForm, "skills": skills})
+    return render(request, "dj_skillswap_app/create_update_post.html", {"post_form": AddProfileSkillForm, "skills": skills})
 
 
-def list_posts(request):
+def post_list(request):
     EXCLUDED_FIELDS = ['id', 'created_at', 'updated_at', 'description']
     if 'param' in request.GET:
         param = request.GET['param']
@@ -80,28 +80,28 @@ def list_posts(request):
                 value = "Active" if value else "Inactive"
             row['values'].append(value)
         rows.append(row)
-    return render(request, 'dj_skillswap_app/browse_posts.html', context={'rows': rows,
-                                                                          'fields': fields, })
+    return render(request, 'dj_skillswap_app/posts_list.html', context={'rows': rows,
+                                                                        'fields': fields, })
 
 
-def edit_skill(request, id):
+def post_update(request, id):
     skill = get_object_or_404(UserProfileSkill, pk=id)
 
     if skill.profile.user != request.user:
-        return HttpResponseForbidden("You are not allowed to edit this skill.")
+        return HttpResponseForbidden("You are not allowed to edit this post.")
 
     if request.method == 'POST':
         form = AddProfileSkillForm(request.POST, instance=skill)
         if form.is_valid():
             form.save()
-            messages.success(request, "Skill updated successfully.")
-            return redirect('posts')
+            messages.success(request, "Post updated successfully.")
+            return redirect('post_list')
         else:
             messages.error(
-                request, "Error updating skill. Please verify the form.")
+                request, "Error updating post. Please verify the form.")
     else:
         form = AddProfileSkillForm(instance=skill)
-    return render(request, 'dj_skillswap_app/add_profile_skill.html', {'add_skill_form': form, 'post_data': skill})
+    return render(request, 'dj_skillswap_app/create_update_post.html', {'post_form': form, 'post_data': skill})
 
 
 def post_detail(request, id):
