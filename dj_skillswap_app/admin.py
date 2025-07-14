@@ -1,7 +1,6 @@
 from django.contrib import admin
-from .models import Skill, UserProfile, UserProfileSkill, Category
+from dj_skillswap_app.models import Skill
+from .models import Profile
 
 admin.site.register(Skill)
-admin.site.register(UserProfile)
-admin.site.register(UserProfileSkill)
-admin.site.register(Category)
+admin.site.register(Profile)
