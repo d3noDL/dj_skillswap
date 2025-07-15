@@ -1,23 +1,25 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
-<div class="container mt-4">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h3 class="card-title text-center">Edit Your Profile</h3>
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
-          <form method="post" enctype="multipart/form-data">
-            {% csrf_token %} {{ form.as_p }}
-
-            <div class="d-grid">
-              <button type="submit" class="btn btn-success mt-3">
-                Save Changes
-              </button>
-            </div>
-          </form>
+{% block content %}
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="card-title text-center mb-4">Edit Your Profile</h3>
+            <form method="post" enctype="multipart/form-data" novalidate>
+              {% csrf_token %}
+              {{ form|crispy }}
+              <div class="d-grid">
+                <button type="submit" class="btn btn-success mt-3">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 {% endblock %}
