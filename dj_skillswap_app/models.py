@@ -34,6 +34,9 @@ class UserProfileSkill(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=True)
 
+    def __str__(self):
+        return f"{self.skill} by {self.profile}"
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
