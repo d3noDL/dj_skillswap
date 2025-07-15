@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
 from .views import (get_skills, register, edit_profile,
-                    view_profile, home, CustomLoginView, skill_search, post_create, post_list, post_detail, post_update, send_message, inbox, send_review)
+                    view_profile, home, CustomLoginView, skill_search, post_create, post_list, post_detail, post_update, send_message, inbox, send_review, toggle_post_status)
 
 app_name = 'dj_skillswap_app'
 
