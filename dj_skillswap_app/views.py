@@ -149,8 +149,7 @@ def post_list(request):
         rows.append(row)
 
     return render(request, 'dj_skillswap_app/posts_list.html', context={
-        'rows': rows,
-        'fields': fields,
+        'posts': posts,
         'categories': categories,
         'search_term': param,
         'selected_category': int(category_id) if category_id else None
@@ -193,3 +192,17 @@ def post_detail(request, id):
         'post_type': post_type,
         'post_what': post_what,
     })
+
+
+@login_required
+def toggle_post_status(request, id):
+    post = get_object_or_404(UserProfileSkill, id=id)
+
+    if request.user != post.profile.user:
+        messages.error(request, "You are not allowed to modify this post.")
+        return redirect('dj_skillswap_app:post_list')
+
+    post.status = not post.status
+    post.save()
+    messages.success(request, "Post deactivated successfully.")
+    return redirect('dj_skillswap_app:post_list')
