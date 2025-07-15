@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<h3>Inbox</h3>
+<!--Adjust so it's just for the logged in user!-->
+{% for message in messages %}
+<hr />
+<p>
+  From:
+  <strong
+    >{{ message.user_sender.firstname }} {{ message.user_sender.lastname }}
+  </strong>
+</p>
+<p>Subject: <em>{{ message.subject }}</em></p>
+<p>Message:</p>
+<pre>&ensp;{{ message.message }}</pre>
+{% endfor %} {% endblock %}

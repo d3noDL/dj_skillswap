@@ -34,6 +34,9 @@ class UserProfileSkill(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=True)
 
+    def __str__(self):
+        return f"{self.skill} by {self.profile}"
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -52,3 +55,25 @@ class UserProfile(models.Model):
 
     def is_complete(self):
         return bool(self.firstname .strip() and self.lastname.strip() and self.bio.strip())
+
+class Message(models.Model):
+    user_sender = models.ForeignKey(UserProfile, related_name="user_sender", on_delete=models.CASCADE)
+    user_receiver = models.ForeignKey(UserProfile, related_name="user_receiver", on_delete=models.CASCADE)
+    subject = models.CharField(max_length=255)
+    message = models.TextField()
+
+    def __str__(self):
+        return self.subject
+
+class Rating(models.Model):
+    class RatingChoice(models.IntegerChoices):
+        FIVE = 5
+        FOUR = 4
+        THREE = 3
+        TWO = 2
+        ONE = 1
+        NONE = 0
+    rating_receiver = models.ForeignKey(UserProfile, related_name="rating_receiver", on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=RatingChoice)
+    comment = models.TextField()
+    rating_sender = models.ForeignKey(UserProfile, related_name="rating_sender", on_delete=models.CASCADE)

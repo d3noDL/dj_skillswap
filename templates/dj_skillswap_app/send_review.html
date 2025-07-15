@@ -1,0 +1,5 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<h2>Send review</h2>
+{% csrf_token %} {{ review_form }}
+<input class="btn btn-success mt-3" type="submit" value="send" />
+{% endblock %}
