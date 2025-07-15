@@ -3,11 +3,9 @@ import django
 import random
 from faker import Faker
 
-# Setup Django environment
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dj_skillswap.settings")
 django.setup()
 
-# Import models
 from dj_skillswap_app.models import Category, Skill, UserProfile, UserProfileSkill, Rating, Message
 from django.contrib.auth.models import User
 
@@ -50,8 +48,8 @@ def add_users(n=20):
                 "firstname": first_name,
                 "lastname": last_name,
                 "bio": faker.text(max_nb_chars=255),
-                "profile_picture": faker.image_url(),  # Use URL instead of raw binary
-                "picture": faker.image_url(),          # Assuming both fields are image URLs
+                "profile_picture": faker.image_url(),
+                "picture": faker.image_url(),
             }
         )
 
