@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, Skill, UserProfile, UserProfileSkill
+from .models import Category, Skill, UserProfile, UserProfileSkill, Message, Rating
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -58,3 +58,13 @@ class AddProfileSkillForm(forms.ModelForm):
                 self.fields['skill'].queryset = Skill.objects.none()
         else:
             self.fields['skill'].queryset = Skill.objects.none()
+
+class NewMessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ("user_receiver", "subject", "message")
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Rating
+        fields = ("rating_receiver", "rating", "comment")

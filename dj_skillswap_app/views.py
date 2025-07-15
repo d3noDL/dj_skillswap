@@ -1,7 +1,7 @@
 from django.http import HttpResponseForbidden
 from django.db.models import Q
-from dj_skillswap_app.forms import AddProfileSkillForm
-from dj_skillswap_app.models import Category, Skill, UserProfileSkill, UserProfile
+from dj_skillswap_app.forms import AddProfileSkillForm, NewMessageForm, ReviewForm
+from dj_skillswap_app.models import Category, Skill, UserProfileSkill, UserProfile, Message
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -193,3 +193,46 @@ def post_detail(request, id):
         'post_type': post_type,
         'post_what': post_what,
     })
+
+@login_required
+def inbox(request):
+    #Change this view so it's just for the logged in user
+    current_profile = get_object_or_404(UserProfile, user=request.user)
+    messages = Message.objects.get(user_receiver=current_profile)
+    return render(request, "dj_skillswap_app/inbox.html", {"messages": messages})
+
+@login_required
+def send_message(request):
+    if request.method == "POST":
+        message_form = NewMessageForm(data=request.POST)
+
+        if message_form.is_valid():
+            current_profile = get_object_or_404(UserProfile, user=request.user)
+            message = message_form.save(commit=False)
+            message.user_sender = current_profile
+            message.save()
+            return HttpResponseRedirect(reverse("inbox"))
+        else:
+            print(message_form.errors)
+    else:
+        message_form = NewMessageForm()
+    
+    return render(request,"dj_skillswap_app/send_message.html", {"message_form": message_form})
+
+@login_required
+def send_review(request):
+    if request.method == "POST":
+        review_form = ReviewForm(data=request.POST)
+
+        if review_form.is_valid():
+            current_profile = get_object_or_404(UserProfile, user=request.user)
+            review = review_form.save(commit=False)
+            review.rating_sender = current_profile
+            review.save()
+            return HttpResponseRedirect(reverse("profile_view"))
+        else:
+            print(review_form.errors)
+    else:
+        review_form = ReviewForm()
+    
+    return render(request, "dj_skillswap_app/send_review.html", {"review_form": review_form})
