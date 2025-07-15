@@ -1,46 +1,43 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
-<h1>Skill Swap List</h1>
-<form method="get" action="{% url 'dj_skillswap_app:post_list' %}">
-  <input type="text" name="param" value="{{ search_term }}" class="form-control">
 
-  <select name="category" class="form-select">
-    <option value="">All Categories</option>
-    {% for cat in categories %}
-    <option value="{{ cat.id }}" {% if cat.id == selected_category %}selected{% endif %}>{{ cat.name }}</option>
+  <div class="row align-items-center justify-content-between mb-4">
+    
+    <!-- Título à esquerda -->
+    <div class="col-md-4">
+      <h1 class="mb-0">Skill Swap List</h1>
+    </div>
+
+    <!-- Formulário à direita -->
+    <div class="col-md-8">
+      <form method="get" action="{% url 'dj_skillswap_app:post_list' %}" class="d-flex flex-wrap align-items-center justify-content-end gap-2">
+        
+        <input type="text" name="param" value="{{ request.GET.param }}" class="form-control w-auto" placeholder="Search...">
+
+
+        <select name="category" class="form-select w-auto">
+          <option value="">All Categories</option>
+          {% for category in categories %}
+            <option value="{{ category.id }}" {% if category.id|stringformat:"s" == request.GET.category %}selected{% endif %}>
+              {{ category.name }}
+            </option>
+          {% endfor %}
+        </select>
+
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a href="{% url 'dj_skillswap_app:post_create' %}" class="btn btn-outline-secondary">New post</a>
+
+        {% csrf_token %}
+      </form>
+    </div>
+  </div>
+   <!-- Grid dos cards -->
+  <div class="row gy-4">
+    {% for post in posts %}
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+      {% include "partials/post_card.html" with post=post request=request %}
+    </div>
     {% endfor %}
-  </select>
-  <button type="submit">Search</button>
-  {% csrf_token %}
-</form>
-<a href="{% url 'dj_skillswap_app:post_create' %}">Create a post</a>
-<table>
-  <table>
-    <thead>
-      <tr>
-        {% for field in fields %}
-        <th>{{ field.verbose_name|title }}</th>
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in rows %}
-      <tr data-href="{% url 'dj_skillswap_app:post_details' row.id %}">
-        {% for value in row.values %}
-        <td>{{ value }}</td>
-        {% endfor %}
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</table>
+  </div>
 
-{% endblock %}
-{% block script %}
-<script>
-  document.querySelectorAll('tr[data-href]').forEach(row => {
-    row.addEventListener('click', () => {
-      window.location.href = row.dataset.href;
-    });
-  });
-</script>
+
 {% endblock %}
