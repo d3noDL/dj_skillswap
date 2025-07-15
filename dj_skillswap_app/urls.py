@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
-from .views import (get_skills, register, edit_profile,
+from .views import (toggle_post_status, get_skills, register, edit_profile,
                     view_profile, home, CustomLoginView, skill_search, post_create, post_list, post_detail, post_update)
 
 app_name = 'dj_skillswap_app'
@@ -17,4 +17,5 @@ urlpatterns = [
     path('post_details/<int:id>/', post_detail, name='post_details'),
     path('posts/<int:id>/edit/', post_update, name='post_update'),
     path('get-skills/', get_skills, name='get_skills'),
+    path('post/<int:id>/toggle-status/', toggle_post_status, name='toggle_post_status'),
 ]
