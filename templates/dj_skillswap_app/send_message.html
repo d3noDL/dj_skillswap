@@ -1,0 +1,6 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<h3>New message</h3>
+<div class="">{% csrf_token %} {{ message_form }}</div>
+
+<input class="btn btn-success mt-3" type="submit" value="send" />
+{% endblock %}
