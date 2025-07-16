@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
 from .views import (get_skills, register, edit_profile,
-                    view_profile, home, CustomLoginView, skill_search, post_create, post_list, post_detail, post_update, send_message, inbox, send_review, toggle_post_status)
+                    view_profile, home, CustomLoginView, skill_search, post_create, post_list, post_detail, post_update, send_message, inbox, send_review, toggle_post_status, dashboard)
 
 app_name = 'dj_skillswap_app'
 
@@ -22,4 +22,5 @@ urlpatterns = [
     path('inbox/<int:message_id>/', inbox, name='inbox_detail'),
     path('send_message/<int:id>/', send_message, name="send_message"),
     path('send_review/<int:id>/', send_review, name="send_review"),
+    path('dashboard/', dashboard, name="dashboard")
 ]
