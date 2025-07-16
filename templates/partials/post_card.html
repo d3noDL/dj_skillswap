@@ -30,7 +30,7 @@
         <h5 class="font-size-16 mb-1">
           <a href="#" class="text-dark">{{ post.type }}</a>
         </h5>
-        <span class="badge text-bg-{% if post.status %}success{% else %}danger{% endif %}">
+        <span class="badge badge-{% if post.status %}soft-success{% else %}soft-danger{% endif %}">
           {% if post.status %}Active{% else %}Inactive{% endif %}
         </span>
 
@@ -58,8 +58,8 @@
     </div>
 
     <div class="d-flex gap-2 pt-4">
-      <a href="{% url 'dj_skillswap_app:post_details' post.id %}" class="btn btn-primary btn-sm w-50">Details</a>
-      <a href="{% url 'home' %}" class="btn btn-primary btn-sm w-50">
+      <a href="{% url 'dj_skillswap_app:post_details' post.id %}" class="btn button btn-sm w-50">Details</a>
+      <a href="{% url 'home' %}" class="btn button btn-sm w-50">
         <i class="bx bx-message-square-dots me-1"></i> Contact
       </a>
     </div>

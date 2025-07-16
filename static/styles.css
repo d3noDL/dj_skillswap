@@ -114,3 +114,11 @@ a {
   vertical-align: baseline;
   border-radius: 0.75rem;
 }
+
+.card-header {
+  background-color: #d1d7e6;
+}
+
+.button {
+  background-color: #6ea8fe;
+}
