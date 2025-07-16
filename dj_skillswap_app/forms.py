@@ -4,6 +4,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Submit
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.forms import Textarea
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
@@ -57,6 +58,14 @@ class AddProfileSkillForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+        self.fields['status'].widget = forms.Select(choices=[
+            (True, 'Active'),
+            (False, 'Inactive')
+        ])
+        self.fields['description'].widget = Textarea(attrs={
+            'placeholder': 'Describe the swap',
+            'rows': 4,  
+        })
 
         # dynamic skill queryset logic as before
         if self.instance.pk:
@@ -76,12 +85,12 @@ class AddProfileSkillForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.layout = Layout(
+            Field('type', placeholder='Offer or Request'),
             Field('category', placeholder='Select category'),
             Field('skill', placeholder='Select skill'),
             Field('avaliability', placeholder='e.g. Weekends'),
-            Field('description', placeholder='Describe the swap'),
-            Field('type', placeholder='Offer or Request'),
             Field('pitch', placeholder='Your pitch'),
+            Field('description', placeholder='Describe the swap'),          
             Field('status', placeholder='e.g. Open'),
             Submit('submit', 'Save', css_class='btn btn-primary mt-3')
         )
@@ -92,6 +101,27 @@ class NewMessageForm(forms.ModelForm):
         fields = ("user_receiver", "subject", "message")
 
 class ReviewForm(forms.ModelForm):
+    rating = forms.IntegerField(widget=forms.HiddenInput())  # usamos apenas as estrelas no HTML
+
     class Meta:
         model = Rating
-        fields = ("rating_receiver", "rating", "comment")
+        fields = ( "rating", "comment")
+        widgets = {
+            "comment": forms.Textarea(attrs={
+                "rows": 4,
+                "placeholder": "Leave a comment here...",
+                "class": "form-control",
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_show_labels = False
+        self.helper.layout = Layout(
+            Field("rating", css_id="rating-input"),  # input hidden
+            Field("comment", wrapper_class="mb-3"),
+            Submit("submit", "Submit Review", css_class="btn btn-primary w-100")
+        )

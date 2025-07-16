@@ -1,7 +1,7 @@
 from django.http import HttpResponseForbidden
 from django.db.models import Q
 from dj_skillswap_app.forms import AddProfileSkillForm, NewMessageForm, ReviewForm
-from dj_skillswap_app.models import Category, Skill, UserProfileSkill, UserProfile, Message
+from dj_skillswap_app.models import Category, Skill, UserProfileSkill, UserProfile, Message, Rating
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -11,7 +11,7 @@ from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.urls import reverse
 from django.http import JsonResponse
-
+from .utils import update_user_average_rating
 
 @login_required
 def edit_profile(request):
@@ -109,7 +109,6 @@ def post_create(request):
             return redirect('dj_skillswap_app:post_create')
     else:
         skill_form = AddProfileSkillForm(user=request.user)
-
     return render(request, "dj_skillswap_app/create_update_post.html", {"post_form": skill_form, "skills": skills})
 
 
@@ -179,18 +178,15 @@ def post_update(request, id):
 
 def post_detail(request, id):
     post = get_object_or_404(UserProfileSkill, pk=id)
+    recent_reviews = Rating.objects.filter(rating_receiver=post.profile).order_by('-id')[:3]
 
-    if post.type == 'Offer':
-        post_type = "I'm offering "
-        post_what = "What am I offering?"
-    else:
-        post_type = "I'm requesting "
-        post_what = "What am I requesting?"
+
 
     return render(request, 'dj_skillswap_app/post_details.html', context={
         'post_data': post,
-        'post_type': post_type,
-        'post_what': post_what,
+        'post_type': post.get_type_display(),
+        'post_what': "What am I offering?" if post.type == "Offer" else "What do I need?",
+        "reviews": recent_reviews
     })
 
 
@@ -223,7 +219,7 @@ def send_message(request):
             message = message_form.save(commit=False)
             message.user_sender = current_profile
             message.save()
-            return HttpResponseRedirect(reverse("inbox"))
+            return redirect("dj_skillswap_app:inbox")
         else:
             print(message_form.errors)
     else:
@@ -232,19 +228,24 @@ def send_message(request):
     return render(request,"dj_skillswap_app/send_message.html", {"message_form": message_form})
 
 @login_required
-def send_review(request):
+def send_review(request, id):
+    reviewed_profile = get_object_or_404(UserProfile, id=id)
+    current_profile = get_object_or_404(UserProfile, user=request.user)
+    print(reviewed_profile.average_rating)
     if request.method == "POST":
         review_form = ReviewForm(data=request.POST)
 
         if review_form.is_valid():
-            current_profile = get_object_or_404(UserProfile, user=request.user)
             review = review_form.save(commit=False)
             review.rating_sender = current_profile
+            review.rating_receiver = reviewed_profile
             review.save()
-            return HttpResponseRedirect(reverse("profile_view"))
+            messages.success(request, "Review submitted successfully!")
+            return redirect("dj_skillswap_app:post_list")
         else:
-            print(review_form.errors)
+            messages.error(request, "It happend an error while saving your review.")
     else:
         review_form = ReviewForm()
     
-    return render(request, "dj_skillswap_app/send_review.html", {"review_form": review_form})
+    return render(request, "dj_skillswap_app/send_review.html", {"review_form": review_form, "reviewed_profile": reviewed_profile})
+

@@ -6,6 +6,5 @@ class DjSkillswapAppConfig(AppConfig):
     name = 'dj_skillswap_app'
 
 
-def ready(self):
-        import dj_skillswap_app.signals
-
+    def ready(self):
+            import dj_skillswap_app.signals

@@ -23,8 +23,28 @@ body {
   z-index: 1;
 }
 
+.avatar-md {
+    height: 4rem;
+    width: 4rem;
+}
+
+.avatar-sm {
+    height: 2rem;
+    width: 2rem;
+}
+
+.rounded-circle {
+    border-radius: 50%!important;
+}
+.img-thumbnail {
+    padding: 0.25rem;
+    background-color: #f1f3f7;
+    border: 1px solid #eff0f2;
+    border-radius: 0.75rem;
+}
+
 .star-rating {
-  direction: rtl;
+  direction: ltr;
   display: inline-block;
   cursor: pointer;
 }

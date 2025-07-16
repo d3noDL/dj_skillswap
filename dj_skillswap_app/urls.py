@@ -20,5 +20,5 @@ urlpatterns = [
     path('post/<int:id>/toggle-status/', toggle_post_status, name='toggle_post_status'),
     path('inbox/', inbox, name="inbox"),
     path('send_message/', send_message, name="send_message"),
-    path('send_review/', send_review, name="send_review"),
+    path('send_review/<int:id>/', send_review, name="send_review"),
 ]
