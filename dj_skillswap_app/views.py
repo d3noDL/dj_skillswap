@@ -250,7 +250,7 @@ def send_review(request):
     
     return render(request, "dj_skillswap_app/send_review.html", {"review_form": review_form})
 
-#@login_required
+@login_required
 def dashboard(request):
     fake_users = [UserProfile.objects.order_by("?")[0] for _ in range(5)]
     total_users = len(UserProfile.objects.all())
