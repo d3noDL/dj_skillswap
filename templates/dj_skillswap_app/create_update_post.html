@@ -13,9 +13,8 @@
 
   <form method="post" novalidate>
     {% csrf_token %}
-    {{ post_form|crispy }}
-    <!-- Submit button is defined via FormHelper, but you can also keep this -->
-    <button type="submit" class="btn btn-primary mt-3">Save</button>
+    {% crispy post_form %}
+
   </form>
 </div>
 {% endblock %}

@@ -22,12 +22,19 @@ class UserProfileSkill(models.Model):
         OFFER = 'Offer', 'Offer'
         REQUEST = 'Request', 'Request'
 
+    class TypeAvaliability(models.TextChoices):
+        FULL_TIME = 'Full-time', 'Full-time'
+        PART_TIME = 'Part-time', 'Part-time'
+        WEEKENDS = 'Weekends only', 'Weekends only'
+        ON_REQUEST = 'On request', 'On request'
+        FLEXIBLE = 'Flexible', 'Flexible'
+
     profile = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
     skill = models.ForeignKey('Skill', on_delete=models.CASCADE)
     description = models.CharField(max_length=500)
     type = models.CharField(
         max_length=20, choices=TypePosting.choices, default=TypePosting.OFFER)
-    avaliability = models.CharField(max_length=250)
+    avaliability = models.CharField(max_length=30, choices=TypeAvaliability.choices, default=TypeAvaliability.FULL_TIME)
     pitch = models.CharField(max_length=140)
     created_at = models.DateTimeField(
         auto_now_add=True)
@@ -48,6 +55,10 @@ class UserProfile(models.Model):
     skills = models.ManyToManyField('Skill', through='UserProfileSkill')
     profile_picture = models.ImageField(
         upload_to='profile_pics/', blank=True, null=True)
+    average_rating = models.FloatField(default=0.0)
+    created_at = models.DateTimeField(
+        auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         full_name = f"{self.user.first_name} {self.user.last_name}".strip()
@@ -61,6 +72,8 @@ class Message(models.Model):
     user_receiver = models.ForeignKey(UserProfile, related_name="user_receiver", on_delete=models.CASCADE)
     subject = models.CharField(max_length=255)
     message = models.TextField()
+    sent_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
 
     def __str__(self):
         return self.subject
@@ -77,3 +90,5 @@ class Rating(models.Model):
     rating = models.IntegerField(choices=RatingChoice)
     comment = models.TextField()
     rating_sender = models.ForeignKey(UserProfile, related_name="rating_sender", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(
+        auto_now_add=True)

@@ -1,5 +1,36 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %} {% load static %} 
+{% load crispy_forms_tags %}
+{% block content %}
 <h2>Send review</h2>
-{% csrf_token %} {{ review_form }}
-<input class="btn btn-success mt-3" type="submit" value="send" />
+<form method="post">
+
+  {% csrf_token %} 
+<h5>Leave a review for {{ reviewed_profile }}</h5>
+
+  <!-- Estrelas visuais -->
+  <div class="star-rating animated-stars mb-3 text-center">
+    {% for i in "54321" %}
+      <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}">
+      <label for="star{{ i }}" class="bi bi-star-fill fs-3"></label>
+    {% endfor %}
+  </div>
+{{ review_form|crispy }}
+<button type="submit" class="btn btn-primary">Send</button>
+</form>
+{% endblock %}
+{% block script %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const stars = document.querySelectorAll('.star-rating input[type="radio"]');
+    const ratingInput = document.getElementById("id_rating");
+
+    stars.forEach(star => {
+      star.addEventListener("change", function () {
+        if (ratingInput) {
+          ratingInput.value = this.value;
+        }
+      });
+    });
+  });
+</script>
 {% endblock %}

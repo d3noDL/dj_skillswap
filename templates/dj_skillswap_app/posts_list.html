@@ -23,11 +23,12 @@
           {% endfor %}
         </select>
 
-        <button type="submit" class="btn btn-primary">Search</button>
-        <a href="{% url 'dj_skillswap_app:post_create' %}" class="btn btn-outline-secondary">New post</a>
-
+        <button type="submit" class="btn button">Search</button>
+        <a href="{% url 'dj_skillswap_app:post_create' %}" class="btn button">New post</a>
+<button onclick="history.back()" class="btn btn-outline-secondary">← Back</button>
         {% csrf_token %}
       </form>
+      
     </div>
   </div>
    <!-- Grid dos cards -->
