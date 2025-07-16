@@ -7,9 +7,11 @@ from django.contrib.auth.models import User
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['firstname', 'lastname', 'bio', 'profile_picture']
+        fields = ['firstname', 'lastname', 'bio', 'profile_picture', 'skills_offered', 'skills_needed']
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Tell us about yourself'}),
+            'skills_offered': forms.TextInput(attrs={'rows':3,'placeholder': 'e.g. Web Design, Cooking'}),
+            'skills_needed': forms.TextInput(attrs={'rows':3,'placeholder': 'e.g. Spanish, Guitar'}),
         }
 
     def __init__(self, *args, **kwargs):

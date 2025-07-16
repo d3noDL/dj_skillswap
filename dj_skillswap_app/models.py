@@ -45,6 +45,10 @@ class UserProfile(models.Model):
     skills = models.ManyToManyField('Skill', through='UserProfileSkill')
     profile_picture = models.ImageField(
         upload_to='profile_pics/', blank=True, null=True)
+    skills_offered = models.CharField(max_length=255, blank=True)
+    skills_needed = models.CharField(max_length=255, blank=True)
+
+    skills = models.ManyToManyField('Skill', through='UserProfileSkill')
 
     def __str__(self):
         full_name = f"{self.user.first_name} {self.user.last_name}".strip()

@@ -15,12 +15,15 @@ from django.http import JsonResponse
 
 @login_required
 def edit_profile(request):
-    profile, created = UserProfile.objects.get_or_create(user=request.user)
-
+    profile = request.user.userprofile
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            form.save()
+            if form.has_changed():
+                form.save()
+                messages.success(request, "✅ Your profile was updated successfully.")
+            else:
+                messages.info(request, "ℹ️ No changes detected.")
             return redirect('dj_skillswap_app:view_profile')
     else:
         form = UserProfileForm(instance=profile)
@@ -28,9 +31,13 @@ def edit_profile(request):
     return render(request, 'profile/profile_edit.html', {'form': form})
 
 
+
 @login_required
 def view_profile(request):
-    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    try:
+        profile = request.user.userprofile
+    except UserProfile.DoesNotExist:
+        profile = UserProfile.objects.create(user=request.user)
     return render(request, 'profile/profile_view.html', {'profile': profile})
 
 
