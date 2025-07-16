@@ -27,7 +27,7 @@ def add_skills(n=7):
         category = random.choice(categories)
         Skill.objects.get_or_create(name=name, category=category)
 
-def add_users(n=20):
+def add_users(n=150):
     for _ in range(n):
         first_name = faker.first_name()
         last_name = faker.last_name()

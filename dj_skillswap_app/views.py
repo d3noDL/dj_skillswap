@@ -11,7 +11,8 @@ from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.urls import reverse
 from django.http import JsonResponse
-
+from faker import Faker
+import random
 
 @login_required
 def edit_profile(request):
@@ -248,3 +249,15 @@ def send_review(request):
         review_form = ReviewForm()
     
     return render(request, "dj_skillswap_app/send_review.html", {"review_form": review_form})
+
+#@login_required
+def dashboard(request):
+    fake_users = [UserProfile.objects.order_by("?")[0] for _ in range(5)]
+    total_users = len(UserProfile.objects.all())
+
+    fake_activities = []
+    for _ in range(11):
+        fake_user = UserProfile.objects.order_by("?")[0]
+        activities = [" posted a skill!", " engaged in a skillswap!", f" got rated {random.randint(0, 6)} star/s!"]
+        fake_activities.append(f"{fake_user.firstname} {fake_user.lastname} {random.choice(activities)}")
+    return render(request, "dj_skillswap_app/dashboard.html", {"users": fake_users, "activities": fake_activities, "total_users": total_users})
