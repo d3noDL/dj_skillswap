@@ -94,7 +94,7 @@
 						{% if request.user != post_data.profile.user %}
 						<div class="mt-auto text-end">
 							<a href="{% url 'dj_skillswap_app:send_review' post_data.profile.id %}" class="btn button">Review</a>
-							<a href="{% url 'dj_skillswap_app:send_message'  %}" class="btn button">Contact</a>
+							<a href="{% url 'dj_skillswap_app:send_message' post_data.profile.id  %}" class="btn button">Contact</a>
 						</div>
 						{% endif %}
 					</div>

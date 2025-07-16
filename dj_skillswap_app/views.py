@@ -202,30 +202,45 @@ def toggle_post_status(request, id):
     post.save()
     messages.success(request, "Post deactivated successfully.")
     return redirect('dj_skillswap_app:post_list')
-@login_required
-def inbox(request):
-    #Change this view so it's just for the logged in user
-    current_profile = get_object_or_404(UserProfile, user=request.user)
-    messages = Message.objects.get(user_receiver=current_profile)
-    return render(request, "dj_skillswap_app/inbox.html", {"messages": messages})
 
 @login_required
-def send_message(request):
+def inbox(request, message_id=None):
+    current_profile = get_object_or_404(UserProfile, user=request.user)
+    messages = Message.objects.filter(user_receiver=current_profile).order_by('-sent_at')
+    selected_message = None
+
+    if message_id:
+        selected_message = get_object_or_404(Message, pk=message_id, user_receiver=current_profile)
+        if not selected_message.is_read:
+            selected_message.is_read = True
+            selected_message.save()
+
+    return render(request, 'dj_skillswap_app/inbox.html', {
+        'messages': messages,
+        'selected_message': selected_message
+    })
+
+@login_required
+def send_message(request, id):
+    reciever_profile = get_object_or_404(UserProfile, id=id)
+    current_profile = get_object_or_404(UserProfile, user=request.user)
+
     if request.method == "POST":
         message_form = NewMessageForm(data=request.POST)
 
         if message_form.is_valid():
-            current_profile = get_object_or_404(UserProfile, user=request.user)
             message = message_form.save(commit=False)
             message.user_sender = current_profile
+            message.user_receiver = reciever_profile
             message.save()
+            messages.success(request, "Review submitted successfully!")
             return redirect("dj_skillswap_app:inbox")
         else:
-            print(message_form.errors)
+            messages.error(request, "It happend an error while sending your message.")
     else:
         message_form = NewMessageForm()
     
-    return render(request,"dj_skillswap_app/send_message.html", {"message_form": message_form})
+    return render(request,"dj_skillswap_app/send_message.html", {"message_form": message_form, "reciever_profile": reciever_profile})
 
 @login_required
 def send_review(request, id):

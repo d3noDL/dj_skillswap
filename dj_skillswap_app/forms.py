@@ -98,7 +98,27 @@ class AddProfileSkillForm(forms.ModelForm):
 class NewMessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ("user_receiver", "subject", "message")
+        fields = ("subject", "message")
+        widgets = {
+            "message": forms.Textarea(attrs={
+                "rows": 4,
+                "placeholder": "Write your message here...",
+                "class": "form-control",
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.layout = Layout(
+            Field("subject"),
+            Field("message", wrapper_class="mb-3"),
+            Submit("submit", "Submit Review", css_class="btn btn-primary w-100 d-flex")
+        )
+
+
 
 class ReviewForm(forms.ModelForm):
     rating = forms.IntegerField(widget=forms.HiddenInput())  # usamos apenas as estrelas no HTML

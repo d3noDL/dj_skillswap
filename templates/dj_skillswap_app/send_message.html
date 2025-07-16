@@ -1,6 +1,15 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
-<h3>New message</h3>
-<div class="">{% csrf_token %} {{ message_form }}</div>
+{% extends 'base.html' %} {% load static %} 
+{% load crispy_forms_tags %}
+{% block content %}
 
-<input class="btn btn-success mt-3" type="submit" value="send" />
+<h2>New message</h2>
+<form method="post">
+{% csrf_token %} 
+<h5>Send a message for <span class="fw-semibold text-secondary">{{ reciever_profile }}</span></h5>
+{{ message_form|crispy }}
+<button type="submit" class="btn btn-primary">Send</button>
+</form>
+
+
+
 {% endblock %}
