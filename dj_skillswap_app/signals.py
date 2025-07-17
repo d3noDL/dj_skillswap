@@ -8,7 +8,10 @@ from .utils import update_user_average_rating
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
-    instance.userprofile.save()
+    else:
+        if hasattr(instance, "userprofile"):
+            instance.userprofile.save()
+
 
 @receiver(post_save, sender=Rating)
 def update_average_rating_on_review(sender, instance, **kwargs):

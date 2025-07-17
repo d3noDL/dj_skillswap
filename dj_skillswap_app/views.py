@@ -17,7 +17,7 @@ from .utils import update_user_average_rating
 
 @login_required
 def edit_profile(request):
-    profile = request.user.userprofile
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
@@ -36,10 +36,9 @@ def edit_profile(request):
 
 @login_required
 def view_profile(request):
-    profile = request.user.userprofile
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
     categories = Category.objects.all()
     selected_category = request.GET.get('category')
-
     user_posts = UserProfileSkill.objects.filter(profile=profile)
     reviews = Rating.objects.filter(rating_receiver=profile).order_by('-id')[:4]
     if selected_category:
@@ -81,10 +80,13 @@ class CustomLoginView(LoginView):
 
     def get_success_url(self):
         user = self.request.user
+
+        # SAFELY get or create the profile
         profile, created = UserProfile.objects.get_or_create(user=user)
 
         if not hasattr(profile, 'is_complete') or not profile.is_complete():
             return reverse('dj_skillswap_app:edit_profile')
+
         return reverse('dj_skillswap_app:view_profile')
 
 
