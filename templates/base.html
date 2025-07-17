@@ -30,6 +30,9 @@
             <a class="nav-link me-3" href="{% url 'dj_skillswap_app:post_list' %}">Browse Skills</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link me-3" href="{% url 'dj_skillswap_app:inbox' %}">Messages</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link me-3" href="{% url 'dj_skillswap_app:view_profile' %}">My Profile</a>
           </li>
           {% if user.is_superuser %}
@@ -51,7 +54,7 @@
               href="{% url 'dj_skillswap_app:signup' %}">Signup</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link btn btn-outline-primary btn-sm  px-4 py-2 fw-semibold"
+            <a class="btn btn-outline-primary btn-sm  px-4 py-2 fw-semibold"
               href="{% url 'dj_skillswap_app:login' %}">Login</a>
           </li>
           {% endif %}
