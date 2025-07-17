@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-start mb-3 px-3">
   <h3>Inbox</h3>
@@ -20,7 +20,7 @@
       </div>
       <div class="panel-body no-padding">
         <div class="list-group no-margin list-message">
-          {% for msg in messages %}
+          {% for msg in user_messages %}
           <div class="list-group-item {% if selected_message and selected_message.id == msg.id %}active{% endif %}">
             <a href="{% url 'dj_skillswap_app:inbox_detail' msg.id %}" class="message-link text-decoration-none">
               <div class="d-flex justify-content-between">
@@ -29,7 +29,7 @@
               </div>
               <div class="d-flex justify-content-between">
                 <span>{{ msg.subject|truncatewords:5 }} </span>
-                
+
                 <span
                   class="badge {% if msg.is_read %}badge-soft-success text-success{% else %}badge-soft-danger text-danger{% endif %}">
                   {% if msg.is_read %}Read{% else %}New{% endif %}
@@ -78,6 +78,18 @@
         <p class="lead"><small>Subject:</small> {{ selected_message.subject }}</p>
         <hr>
         <p>{{ selected_message.message|linebreaks }}</p>
+      </div>
+      <div class="text-end mt-4">
+        <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#replyForm">
+          Reply
+        </button>
+      </div>
+      <div class="collapse mt-3" id="replyForm">
+        <form method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-primary">Send</button>
+        </form>
       </div>
     </div>
     {% else %}
