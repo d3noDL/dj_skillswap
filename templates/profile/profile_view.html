@@ -1,36 +1,97 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
-<div class="container mt-4">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-body text-center">
-          <h3 class="card-title">{{ request.user.username }}'s Profile</h3>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 
-          {% if profile.profile_picture %}
-          <img
-            src="{{ profile.profile_picture.url }}"
-            alt="Profile Picture"
-            class="img-thumbnail mb-3"
-            width="150"
-          />
+
+  <div class="row align-items-center justify-content-between mb-4">
+    
+    <!-- Título à esquerda -->
+    <div class="col-md-4">
+      <h1 class="mb-0">Profile</h1>
+    </div>
+
+    <!-- Formulário à direita -->
+    <div class="col-md-8 d-flex justify-content-end">
+     
+      <a href="{% url 'dj_skillswap_app:edit_profile' %}" class="btn button mx-2" > Edit  </a>
+      <button onclick="history.back()" class="btn btn-outline-secondary">← Back</button>
+    </div>
+  </div>
+  <!-- Profile Card -->
+  <div class="card shadow p-4 mb-5 rounded-4 border-0">
+    <div class="row align-items-center">
+      <div class="col-md-3 text-center">
+        {% if profile.profile_picture %}
+          <img src="{{ profile.profile_picture.url }}" class="img-thumbnail rounded-circle"  />
+        {% else %}
+          <img src="{% static 'images/default.jpg' %}" class="img-thumbnail rounded-circle"  />
+        {% endif %}
+        <div class="star-rating readonly my-2 ">
+        {% for i in "12345" %}
+          {% if i|add:"0" <= profile.average_rating %}
+            <i class="bi bi-star-fill text-warning"></i>
+          {% elif i|add:"0" < profile.average_rating|add:"1" %}
+            <i class="bi bi-star-half text-warning"></i>
           {% else %}
-          <img
-            src="{% static 'img/default.jpg' %}"
-            alt="Default Profile"
-            class="img-thumbnail mb-3"
-            width="150"
-          />
+            <i class="bi bi-star text-warning"></i>
           {% endif %}
-          <p><strong>First name:</strong> {{ profile.firstname }}</p>
-          <p><strong>Last name:</strong> {{ profile.lastname }}</p>
-          <p><strong>Bio:</strong> {{ profile.bio }}</p>
+        {% endfor %}
+      </div>
+      <h6 class="text-muted">{{profile.average_rating}}</h6>
+      </div>
 
-          <a href="{% url 'dj_skillswap_app:edit_profile' %}" class="btn btn-primary mt-3"
-            >Edit Profile</a
-          >
-        </div>
+      <div class="col-md-9">
+        
+        <h3 class="mb-1"><strong>Full Name:</strong> {{ profile.firstname }} {{ profile.lastname }}</h3>
+        <h4 class="mb-1"><strong>Bio:</strong> {{ profile.bio|default:"(No bio provided)" }}</h4>
+       
+        
       </div>
     </div>
   </div>
+
+  <!-- Filter Dropdown -->
+<form method="get" class="mb-4">
+  <div class="row g-2 align-items-center">
+    <div class="col-auto">
+      <label for="categoryFilter" class="form-label mb-0 fs-5">Filter</label>
+    </div>
+    <div class="col-md-4">
+      <select name="category" id="categoryFilter" class="form-select w-auto" onchange="this.form.submit()">
+        <option value="">All Categories</option>
+        {% for category in categories %}
+          <option value="{{ category.id }}" {% if selected_category == category.id %}selected{% endif %}>
+            {{ category.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+</form>
+
+
+<!-- User Posts Section -->
+<h5 class="fw-semibold mb-3">Your Posts</h5>
+
+   <!-- Grid dos cards -->
+  <div class="row gy-4">
+     {% for post in user_posts %}
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+      {% include "partials/post_card.html" with post=post  %}
+    </div>
+    {% empty %}
+    <div class="col-12 text-muted">You haven’t created any posts yet.</div>
+  {% endfor %}
+  </div>
+
+<!-- Grid dos cards -->
+<div class="row justify-content-center mt-4">
+	<h5 class="fw-semibold mb-3">Latest Reviews</h5>
+	{% for review in reviews %}
+	<div class="col-12 col-md-6 col-lg-4 col-xl-3">
+		{% include "partials/review_card.html" with review=review %}
+	</div>
+	{% endfor %}
 </div>
+
 {% endblock %}

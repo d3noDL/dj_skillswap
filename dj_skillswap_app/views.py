@@ -19,11 +19,14 @@ from .utils import update_user_average_rating
 @login_required
 def edit_profile(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
-
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            form.save()
+            if form.has_changed():
+                form.save()
+                messages.success(request, "✅ Your profile was updated successfully.")
+            else:
+                messages.info(request, "ℹ️ No changes detected.")
             return redirect('dj_skillswap_app:view_profile')
     else:
         form = UserProfileForm(instance=profile)
@@ -31,10 +34,26 @@ def edit_profile(request):
     return render(request, 'profile/profile_edit.html', {'form': form})
 
 
+
 @login_required
 def view_profile(request):
-    profile, created = UserProfile.objects.get_or_create(user=request.user)
-    return render(request, 'profile/profile_view.html', {'profile': profile})
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    categories = Category.objects.all()
+    selected_category = request.GET.get('category')
+    user_posts = UserProfileSkill.objects.filter(profile=profile)
+    reviews = Rating.objects.filter(rating_receiver=profile).order_by('-id')[:4]
+    if selected_category:
+        user_posts = user_posts.filter(skill__category_id=selected_category)
+
+    return render(request, 'profile/profile_view.html', {
+        'profile': profile,
+        'user_posts': user_posts,
+        'categories': categories,
+        'selected_category': int(selected_category) if selected_category else None,
+        'reviews': reviews
+    })
+
+
 
 
 def register(request):
@@ -66,10 +85,13 @@ class CustomLoginView(LoginView):
 
     def get_success_url(self):
         user = self.request.user
+
+        # SAFELY get or create the profile
         profile, created = UserProfile.objects.get_or_create(user=user)
 
         if not hasattr(profile, 'is_complete') or not profile.is_complete():
             return reverse('dj_skillswap_app:edit_profile')
+
         return reverse('dj_skillswap_app:view_profile')
 
 

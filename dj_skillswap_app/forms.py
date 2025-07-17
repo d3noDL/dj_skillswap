@@ -12,6 +12,7 @@ class UserProfileForm(forms.ModelForm):
         fields = ['firstname', 'lastname', 'bio', 'profile_picture']
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Tell us about yourself'}),
+
         }
 
     def __init__(self, *args, **kwargs):
