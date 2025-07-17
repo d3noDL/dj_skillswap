@@ -1,3 +1,4 @@
+from dj_skillswap_app.models import UserProfileSkill as Post
 from django.http import HttpResponseForbidden
 from django.db.models import Q
 from dj_skillswap_app.forms import AddProfileSkillForm, NewMessageForm, ReviewForm, ReplyMessageForm
@@ -52,8 +53,12 @@ def register(request):
 
 
 def home(request):
-    return render(request, 'core/home.html')
-
+    posts = Post.objects.filter(status=True)[:6]
+    categories = Category.objects.all()
+    return render(request, 'core/home.html', {
+        'posts': posts,
+        'categories': categories,
+    })
 
 class CustomLoginView(LoginView):
     template_name = 'dj_skillswap_app/login.html'
