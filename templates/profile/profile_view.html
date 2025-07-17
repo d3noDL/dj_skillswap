@@ -71,7 +71,7 @@
 
 
 <!-- User Posts Section -->
-<h4 class="fw-bold mb-3">Your Posts</h4>
+<h5 class="fw-semibold mb-3">Your Posts</h5>
 
    <!-- Grid dos cards -->
   <div class="row gy-4">
@@ -84,6 +84,14 @@
   {% endfor %}
   </div>
 
-
+<!-- Grid dos cards -->
+<div class="row justify-content-center mt-4">
+	<h5 class="fw-semibold mb-3">Latest Reviews</h5>
+	{% for review in reviews %}
+	<div class="col-12 col-md-6 col-lg-4 col-xl-3">
+		{% include "partials/review_card.html" with review=review %}
+	</div>
+	{% endfor %}
+</div>
 
 {% endblock %}

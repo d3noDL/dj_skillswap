@@ -41,6 +41,7 @@ def view_profile(request):
     selected_category = request.GET.get('category')
 
     user_posts = UserProfileSkill.objects.filter(profile=profile)
+    reviews = Rating.objects.filter(rating_receiver=profile).order_by('-id')[:4]
     if selected_category:
         user_posts = user_posts.filter(skill__category_id=selected_category)
 
@@ -48,7 +49,8 @@ def view_profile(request):
         'profile': profile,
         'user_posts': user_posts,
         'categories': categories,
-        'selected_category': int(selected_category) if selected_category else None
+        'selected_category': int(selected_category) if selected_category else None,
+        'reviews': reviews
     })
 
 
