@@ -34,11 +34,22 @@ def edit_profile(request):
 
 @login_required
 def view_profile(request):
-    try:
-        profile = request.user.userprofile
-    except UserProfile.DoesNotExist:
-        profile = UserProfile.objects.create(user=request.user)
-    return render(request, 'profile/profile_view.html', {'profile': profile})
+    profile = request.user.userprofile
+    categories = Category.objects.all()
+    selected_category = request.GET.get('category')
+
+    user_posts = UserProfileSkill.objects.filter(profile=profile)
+    if selected_category:
+        user_posts = user_posts.filter(skill__category_id=selected_category)
+
+    return render(request, 'profile/profile_view.html', {
+        'profile': profile,
+        'user_posts': user_posts,
+        'categories': categories,
+        'selected_category': int(selected_category) if selected_category else None
+    })
+
+
 
 
 def register(request):
