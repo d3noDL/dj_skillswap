@@ -70,9 +70,11 @@
 
     <div class="d-flex gap-2 pt-3 mt-auto">
       <a href="{% url 'dj_skillswap_app:post_details' post.id %}" class="btn button btn-sm w-50">Details</a>
+      {% if request.user !=  post.profile.user %}
       <a href="{% url 'dj_skillswap_app:send_message' post.profile.id  %}" class="btn button btn-sm w-50">
         <i class="bx bx-message-square-dots me-1"></i> Contact
       </a>
+      {% endif %}
     </div>
 
   </div>

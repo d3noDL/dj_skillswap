@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dj_skillswap_app', '0002_category_alter_skill_category_message'),
+        ('dj_skillswap_app', '0003_alter_userprofileskill_avaliability'),
     ]
 
     operations = [
