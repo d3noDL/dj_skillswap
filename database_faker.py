@@ -50,6 +50,9 @@ def add_users(n=150):
                 "bio": faker.text(max_nb_chars=255),
                 "profile_picture": faker.image_url(),
                 "picture": faker.image_url(),
+                "average_rating ": random.uniform(0, 5),
+                "created_at": faker.date_time_this_year(),
+                "updated_at": faker.date_time_this_year(),
             }
         )
 
@@ -95,6 +98,7 @@ def add_ratings_to_profiles(n=None):
                 defaults={
                     "rating": random.randint(1, 5),
                     "comment": faker.text(max_nb_chars=255),
+                    "created_at": faker.date_time_this_year(),
                 }
             )
 
@@ -118,6 +122,8 @@ def add_messages(n=None):
             defaults={
                 "subject": faker.text(max_nb_chars=50),
                 "message": faker.text(max_nb_chars=255),
+                "sent_at": faker.date_time_this_year(),
+                "is_read": faker.boolean(),
             }
         )
 
