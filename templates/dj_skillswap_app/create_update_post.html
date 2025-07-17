@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 <div class="container mt-5">
@@ -13,43 +13,8 @@
 
   <form method="post" novalidate>
     {% csrf_token %}
+    {% crispy post_form %}
 
-    <div class="mb-3">
-      <label for="id_category" class="form-label">Category</label>
-      {{ post_form.category }}
-    </div>
-
-    <div class="mb-3">
-      <label for="id_skill" class="form-label">Skill</label>
-      {{ post_form.skill }}
-    </div>
-
-    <div class="mb-3">
-      <label for="id_avaliability" class="form-label">Availability</label>
-      {{ post_form.avaliability }}
-    </div>
-
-    <div class="mb-3">
-      <label for="id_description" class="form-label">Description</label>
-      {{ post_form.description }}
-    </div>
-
-    <div class="mb-3">
-      <label for="id_type" class="form-label">Type</label>
-      {{ post_form.type }}
-    </div>
-
-    <div class="mb-3">
-      <label for="id_pitch" class="form-label">Pitch</label>
-      {{ post_form.pitch }}
-    </div>
-
-    <div class="mb-3">
-      <label for="id_status" class="form-label">Status</label>
-      {{ post_form.status }}
-    </div>
-
-    <button type="submit" class="btn btn-primary">Save</button>
   </form>
 </div>
 {% endblock %}
@@ -57,27 +22,22 @@
 {% block script %}
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const categorySelect = document.getElementById('id_category');
-    const skillSelect = document.getElementById('id_skill');
-
-    categorySelect.addEventListener('change', function () {
-      const categoryId = this.value;
-      skillSelect.innerHTML = '<option value="">Loading...</option>';
-
-      fetch(`/app/get-skills/?category_id=${categoryId}`)
-        .then(response => response.json())
+    const category = document.getElementById('id_category');
+    const skill = document.getElementById('id_skill');
+    category.addEventListener('change', function () {
+      skill.innerHTML = '<option>Loading...</option>';
+      fetch(`/app/get-skills/?category_id=${this.value}`)
+        .then(r => r.json())
         .then(data => {
-          skillSelect.innerHTML = '<option value="">Select a skill</option>';
-          data.forEach(skill => {
-            const option = document.createElement('option');
-            option.value = skill.id;
-            option.textContent = skill.name;
-            skillSelect.appendChild(option);
+          skill.innerHTML = '<option>Select a skill</option>';
+          data.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = s.name;
+            skill.appendChild(opt);
           });
-        })
-        .catch(error => {
-          skillSelect.innerHTML = '<option value="">Error loading skills</option>';
-          console.error('Error:', error);
+        }).catch(() => {
+          skill.innerHTML = '<option>Error loading skills</option>';
         });
     });
   });

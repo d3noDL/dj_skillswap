@@ -1,9 +1,9 @@
 from django.http import HttpResponseForbidden
 from django.db.models import Q
 from dj_skillswap_app.forms import AddProfileSkillForm, NewMessageForm, ReviewForm
-from dj_skillswap_app.models import Category, Skill, UserProfileSkill, UserProfile, Message
+from dj_skillswap_app.models import Category, Skill, UserProfileSkill, UserProfile, Message, Rating
 from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect
 from .forms import UserProfileForm, UserRegisterForm
 from django.contrib import messages
@@ -11,7 +11,9 @@ from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.urls import reverse
 from django.http import JsonResponse
-
+from faker import Faker
+import random
+from .utils import update_user_average_rating
 
 @login_required
 def edit_profile(request):
@@ -127,7 +129,6 @@ def post_create(request):
             return redirect('dj_skillswap_app:post_create')
     else:
         skill_form = AddProfileSkillForm(user=request.user)
-
     return render(request, "dj_skillswap_app/create_update_post.html", {"post_form": skill_form, "skills": skills})
 
 
@@ -197,18 +198,15 @@ def post_update(request, id):
 
 def post_detail(request, id):
     post = get_object_or_404(UserProfileSkill, pk=id)
+    recent_reviews = Rating.objects.filter(rating_receiver=post.profile).order_by('-id')[:3]
 
-    if post.type == 'Offer':
-        post_type = "I'm offering "
-        post_what = "What am I offering?"
-    else:
-        post_type = "I'm requesting "
-        post_what = "What am I requesting?"
+
 
     return render(request, 'dj_skillswap_app/post_details.html', context={
         'post_data': post,
-        'post_type': post_type,
-        'post_what': post_what,
+        'post_type': post.get_type_display(),
+        'post_what': "What am I offering?" if post.type == "Offer" else "What do I need?",
+        "reviews": recent_reviews
     })
 
 
@@ -224,45 +222,77 @@ def toggle_post_status(request, id):
     post.save()
     messages.success(request, "Post deactivated successfully.")
     return redirect('dj_skillswap_app:post_list')
-@login_required
-def inbox(request):
-    #Change this view so it's just for the logged in user
-    current_profile = get_object_or_404(UserProfile, user=request.user)
-    messages = Message.objects.get(user_receiver=current_profile)
-    return render(request, "dj_skillswap_app/inbox.html", {"messages": messages})
 
 @login_required
-def send_message(request):
+def inbox(request, message_id=None):
+    current_profile = get_object_or_404(UserProfile, user=request.user)
+    messages = Message.objects.filter(user_receiver=current_profile).order_by('-sent_at')
+    selected_message = None
+
+    if message_id:
+        selected_message = get_object_or_404(Message, pk=message_id, user_receiver=current_profile)
+        if not selected_message.is_read:
+            selected_message.is_read = True
+            selected_message.save()
+
+    return render(request, 'dj_skillswap_app/inbox.html', {
+        'messages': messages,
+        'selected_message': selected_message
+    })
+
+@login_required
+def send_message(request, id):
+    reciever_profile = get_object_or_404(UserProfile, id=id)
+    current_profile = get_object_or_404(UserProfile, user=request.user)
+
     if request.method == "POST":
         message_form = NewMessageForm(data=request.POST)
 
         if message_form.is_valid():
-            current_profile = get_object_or_404(UserProfile, user=request.user)
             message = message_form.save(commit=False)
             message.user_sender = current_profile
+            message.user_receiver = reciever_profile
             message.save()
-            return HttpResponseRedirect(reverse("inbox"))
+            messages.success(request, "Review submitted successfully!")
+            return redirect("dj_skillswap_app:inbox")
         else:
-            print(message_form.errors)
+            messages.error(request, "It happend an error while sending your message.")
     else:
         message_form = NewMessageForm()
     
-    return render(request,"dj_skillswap_app/send_message.html", {"message_form": message_form})
+    return render(request,"dj_skillswap_app/send_message.html", {"message_form": message_form, "reciever_profile": reciever_profile})
 
 @login_required
-def send_review(request):
+def send_review(request, id):
+    reviewed_profile = get_object_or_404(UserProfile, id=id)
+    current_profile = get_object_or_404(UserProfile, user=request.user)
+    print(reviewed_profile.average_rating)
     if request.method == "POST":
         review_form = ReviewForm(data=request.POST)
 
         if review_form.is_valid():
-            current_profile = get_object_or_404(UserProfile, user=request.user)
             review = review_form.save(commit=False)
             review.rating_sender = current_profile
+            review.rating_receiver = reviewed_profile
             review.save()
-            return HttpResponseRedirect(reverse("profile_view"))
+            messages.success(request, "Review submitted successfully!")
+            return redirect("dj_skillswap_app:post_list")
         else:
-            print(review_form.errors)
+            messages.error(request, "It happend an error while saving your review.")
     else:
         review_form = ReviewForm()
     
-    return render(request, "dj_skillswap_app/send_review.html", {"review_form": review_form})
+    return render(request, "dj_skillswap_app/send_review.html", {"review_form": review_form, "reviewed_profile": reviewed_profile})
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def dashboard(request):
+    fake_users = [UserProfile.objects.order_by("?")[0] for _ in range(5)]
+    total_users = len(UserProfile.objects.all())
+
+    fake_activities = []
+    for _ in range(11):
+        fake_user = UserProfile.objects.order_by("?")[0]
+        activities = [" posted a skill!", " engaged in a skillswap!", f" got rated {random.randint(0, 6)} star/s!"]
+        fake_activities.append(f"{fake_user.firstname} {fake_user.lastname} {random.choice(activities)}")
+    return render(request, "dj_skillswap_app/dashboard.html", {"users": fake_users, "activities": fake_activities, "total_users": total_users})
