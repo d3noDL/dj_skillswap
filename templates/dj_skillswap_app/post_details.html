@@ -14,10 +14,10 @@
 					<div class="col-lg-4 d-flex flex-column justify-content-center align-items-center mb-4 mb-lg-0">
 						
 						{% if post_data.profile.profile_picture %}
-						<img src="{{ post_data.profile.profile_picture.url }}" alt="Profile picture" class="img-fluid mb-3"
+						<img src="{{ post_data.profile.profile_picture.url }}" alt="Profile picture" class="img-fluid rounded-circle mb-3"
 							style="max-width: 250px; height: auto;">
 						{% else %}
-						<img src="{% static 'images/avatar-placeholder.jpg' %}" alt="Profile picture" class="img-fluid mb-3"
+						<img src="{% static 'images/avatar-placeholder.jpg' %}" alt="Profile picture" class="img-fluid rounded-circle mb-3"
 							style="max-width: 250px; height: auto;">
 						{% endif %}
 						<h5 class=" mb-2 text-dark">
