@@ -32,6 +32,11 @@
           <li class="nav-item">
             <a class="nav-link me-3" href="{% url 'dj_skillswap_app:view_profile' %}">My Profile</a>
           </li>
+          {% if user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link me-3" href="{% url 'dj_skillswap_app:dashboard' %}">Dashboard</a>
+          </li>
+          {% endif %}
           <li class="nav-item">
             <form action="{% url 'dj_skillswap_app:logout' %}" method="post" class="d-inline">
               {% csrf_token %}
