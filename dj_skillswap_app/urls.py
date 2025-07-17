@@ -19,6 +19,7 @@ urlpatterns = [
     path('get-skills/', get_skills, name='get_skills'),
     path('post/<int:id>/toggle-status/', toggle_post_status, name='toggle_post_status'),
     path('inbox/', inbox, name="inbox"),
+    path('inbox/new/', inbox, name="inbox_new"),
     path('inbox/<int:message_id>/', inbox, name='inbox_detail'),
     path('send_message/<int:id>/', send_message, name="send_message"),
     path('send_review/<int:id>/', send_review, name="send_review"),

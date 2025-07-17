@@ -98,7 +98,7 @@ class AddProfileSkillForm(forms.ModelForm):
 class NewMessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ("subject", "message")
+        fields = ("user_receiver", "subject", "message")
         widgets = {
             "message": forms.Textarea(attrs={
                 "rows": 4,
@@ -108,11 +108,15 @@ class NewMessageForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        hide_receiver = kwargs.pop('hide_receiver', False)
         super().__init__(*args, **kwargs)
+        if hide_receiver:
+            self.fields['user_receiver'].widget = forms.HiddenInput()
 
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.layout = Layout(
+            Field("user_receiver", "To", placeholder="Select a user"),  
             Field("subject"),
             Field("message", wrapper_class="mb-3"),
             Submit("submit", "Send", css_class="btn btn-primary w-100 d-flex")
@@ -164,6 +168,7 @@ class ReplyMessageForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.layout = Layout(
+
             Field("subject"),
             Field("message", wrapper_class="mb-3"),
             Submit("submit", "Reply", css_class="btn btn-primary w-100 d-flex")
