@@ -1,17 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load crispy_forms_tags %}
 {% block content %}
-<div class="d-flex justify-content-between align-items-start mb-3 px-3">
-  <h3>Inbox</h3>
-  <button onclick="history.back()" class="btn btn-outline-secondary">← Back</button>
+<div class="d-flex justify-content-between align-items-center mb-3 px-3">
+  <h3 class="mb-0">Inbox</h3>
+
+  <div class="d-flex gap-2">
+    <a href="{% url 'dj_skillswap_app:inbox_new' %}" class="btn button btn-md">+ New Message</a>
+    <button onclick="history.back()" class="btn btn-outline-secondary btn-md">← Back</button>
+  </div>
 </div>
 
-<div class="row message-wrapper rounded shadow mx-2 mb-4 px-3 py-3">
+<div class="row message-wrapper rounded shadow mx-2 mb-4 px-3 py-3 vh-100">
 
   <!-- Sidebar -->
   <div class="col-md-4 message-sideleft">
-    <div class="panel py-3 px-1 vh-100">
+    <div class="panel py-3 px-1 ">
       <div class="panel-heading">
         <div class="pull-left">
           <h3 class="panel-title">Conversations</h3>
@@ -20,7 +24,7 @@
       </div>
       <div class="panel-body no-padding">
         <div class="list-group no-margin list-message">
-          {% for msg in messages %}
+          {% for msg in user_messages %}
           <div class="list-group-item {% if selected_message and selected_message.id == msg.id %}active{% endif %}">
             <a href="{% url 'dj_skillswap_app:inbox_detail' msg.id %}" class="message-link text-decoration-none">
               <div class="d-flex justify-content-between">
@@ -29,7 +33,7 @@
               </div>
               <div class="d-flex justify-content-between">
                 <span>{{ msg.subject|truncatewords:5 }} </span>
-                
+
                 <span
                   class="badge {% if msg.is_read %}badge-soft-success text-success{% else %}badge-soft-danger text-danger{% endif %}">
                   {% if msg.is_read %}Read{% else %}New{% endif %}
@@ -46,10 +50,28 @@
   </div>
 
   <!-- Message content -->
-  <div class="col-md-8 message-sideright">
-    {% if selected_message %}
+  <div class="col-md-8 message-sideright ">
+    {% if show_new_form %}
+    <!-- Formulário de nova mensagem -->
     <div class="panel">
       <div class="panel-heading">
+        <h5>New Message</h5>
+      </div>
+      <div class="panel-body">
+        <form method="post">
+          {% csrf_token %}
+          {{ form.user_receiver|as_crispy_field }}
+          {{ form.subject|as_crispy_field }}
+          {{ form.message|as_crispy_field }}
+          <div class="text-end mt-3">
+          <button type="submit" class="btn button ">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    {% elif selected_message %}
+    <div class="panel message-reading">
+      <div class="panel-heading ">
         <div class="d-flex align-items-center gap-3">
           <!-- Avatar -->
           <div class="flex-shrink-0">
@@ -79,11 +101,28 @@
         <hr>
         <p>{{ selected_message.message|linebreaks }}</p>
       </div>
+      <div class="text-end mt-4">
+        <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#replyForm">
+          Reply
+        </button>
+      </div>
+      {% if show_reply_form %}
+      <div class="collapse m-3 message-reading" id="replyForm">
+        <form method="post" class="m-3">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="text-end mt-3">
+          <button type="submit" class="btn button ">Send</button>
+          </div>
+        </form>
+      </div>
+      {% endif %}
     </div>
     {% else %}
+    <!-- Nenhuma mensagem selecionada -->
     <div class="panel">
-      <div class="panel-body">
-        <p class="text-muted">Select a conversation to view its content.</p>
+      <div class="panel-body  text-center">
+        <h3 class="text-muted ">Select a conversation or start a new one.</h3>
       </div>
     </div>
     {% endif %}

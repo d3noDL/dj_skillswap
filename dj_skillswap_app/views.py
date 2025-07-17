@@ -1,7 +1,7 @@
 from dj_skillswap_app.models import UserProfileSkill as Post
 from django.http import HttpResponseForbidden
 from django.db.models import Q
-from dj_skillswap_app.forms import AddProfileSkillForm, NewMessageForm, ReviewForm
+from dj_skillswap_app.forms import AddProfileSkillForm, NewMessageForm, ReviewForm, ReplyMessageForm
 from dj_skillswap_app.models import Category, Skill, UserProfileSkill, UserProfile, Message, Rating
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -213,18 +213,53 @@ def toggle_post_status(request, id):
 @login_required
 def inbox(request, message_id=None):
     current_profile = get_object_or_404(UserProfile, user=request.user)
-    messages = Message.objects.filter(user_receiver=current_profile).order_by('-sent_at')
+    user_messages = Message.objects.filter(user_receiver=current_profile).order_by('-sent_at')
+    
     selected_message = None
+    form = None
+    show_new_form = False
+    show_reply_form = False
 
-    if message_id:
+    if request.path.endswith('/new/'):
+        show_new_form = True
+        if request.method == 'POST':
+            form = NewMessageForm(request.POST)
+            if form.is_valid():
+                msg = form.save(commit=False)
+                msg.user_sender = current_profile
+                msg.is_read = False
+                msg.is_open = True
+                msg.save()
+                messages.success(request, "Message sent successfully.")
+                return redirect('dj_skillswap_app:inbox')
+        else:
+            form = NewMessageForm()
+    elif message_id:
         selected_message = get_object_or_404(Message, pk=message_id, user_receiver=current_profile)
+        show_reply_form = True
         if not selected_message.is_read:
             selected_message.is_read = True
             selected_message.save()
 
+        if request.method == "POST":
+            form = ReplyMessageForm(request.POST)
+            if form.is_valid():
+                reply = form.save(commit=False)
+                reply.user_sender = current_profile
+                reply.user_receiver = selected_message.user_sender
+                # reply.parent_message = selected_message
+                reply.save()
+                messages.success(request, "Reply sent successfully!")
+                return redirect('dj_skillswap_app:inbox_detail', message_id=selected_message.id)
+        else:
+            form = ReplyMessageForm(initial={'subject': f"Re: {selected_message.subject}"})
+
     return render(request, 'dj_skillswap_app/inbox.html', {
-        'messages': messages,
-        'selected_message': selected_message
+        'user_messages': user_messages,
+        'selected_message': selected_message,
+        'form': form,
+        'show_new_form': show_new_form,
+        'show_reply_form': show_reply_form,
     })
 
 @login_required
@@ -240,13 +275,15 @@ def send_message(request, id):
             message.user_sender = current_profile
             message.user_receiver = reciever_profile
             message.save()
-            messages.success(request, "Review submitted successfully!")
+            messages.success(request, "Message sent successfully!")
             return redirect("dj_skillswap_app:inbox")
         else:
             messages.error(request, "It happend an error while sending your message.")
     else:
-        message_form = NewMessageForm()
-    
+        message_form = NewMessageForm(initial={
+            'user_receiver': reciever_profile.user.id
+        }, hide_receiver=True)
+
     return render(request,"dj_skillswap_app/send_message.html", {"message_form": message_form, "reciever_profile": reciever_profile})
 
 @login_required
