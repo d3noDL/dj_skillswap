@@ -3,7 +3,7 @@ from django.db.models import Q
 from dj_skillswap_app.forms import AddProfileSkillForm, NewMessageForm, ReviewForm
 from dj_skillswap_app.models import Category, Skill, UserProfileSkill, UserProfile, Message, Rating
 from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect
 from .forms import UserProfileForm, UserRegisterForm
 from django.contrib import messages
@@ -12,7 +12,8 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse
 from django.http import JsonResponse
 from faker import Faker
-import randomfrom .utils import update_user_average_rating
+import random
+from .utils import update_user_average_rating
 
 @login_required
 def edit_profile(request):
@@ -266,7 +267,7 @@ def send_review(request, id):
     return render(request, "dj_skillswap_app/send_review.html", {"review_form": review_form, "reviewed_profile": reviewed_profile})
 
 
-@login_required
+@user_passes_test(lambda u: u.is_superuser)
 def dashboard(request):
     fake_users = [UserProfile.objects.order_by("?")[0] for _ in range(5)]
     total_users = len(UserProfile.objects.all())
