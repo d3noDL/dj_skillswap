@@ -30,12 +30,12 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='UserProfile',
+            name='Profile',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('firstname', models.CharField(max_length=100)),
                 ('lastname', models.CharField(max_length=100)),
-                ('picture', models.ImageField(blank=True, null=True, upload_to='userprofile_pics/')),
+                ('picture', models.ImageField(blank=True, null=True, upload_to='profile_pics/')),
                 ('bio', models.TextField(blank=True, null=True)),
                 ('profile_picture', models.ImageField(blank=True, null=True, upload_to='profile_pics/')),
                 ('average_rating', models.FloatField(default=0.0)),
